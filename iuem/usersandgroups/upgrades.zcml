@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/genericsetup"
+    i18n_domain="iuem.usersandgroups">
+
+    <upgradeStep
+        source="*"
+        destination="1001"
+        title="Upgrade"
+        description=""
+        profile="iuem.usersandgroups:default"
+        handler=".upgrades.common"
+        />
+
+</configure>

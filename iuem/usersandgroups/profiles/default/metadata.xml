@@ -3,5 +3,6 @@
   <version>1000</version>
   <dependencies>
     <!--<dependency>profile-xxx:default</dependency>-->
+    <dependency>profile-plone.app.dexterity:default</dependency>
   </dependencies>
 </metadata>

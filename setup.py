@@ -35,6 +35,15 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'five.grok',
+        'plone.directives.dexterity',
+        'plone.directives.form',
+        'collective.dexteritytextindexer',
+        'plone.app.dexterity[grok]',
+        'collective.dexteritytextindexer',
+        'plone.app.relationfield',
+        'Products.CMFPlacefulWorkflow',
+        'plone.api',
         # -*- Extra requirements: -*-
     ],
     extras_require=dict(

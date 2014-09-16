@@ -7,7 +7,7 @@ from plone import api
 from plone.directives import form
 
 from plone.supermodel import model
-from plone.dexterity.content import Container
+from plone.dexterity.content import Item
 from zope.interface import alsoProvides
 from plone.autoform.interfaces import IFormFieldProvider
 from collective import dexteritytextindexer
@@ -25,8 +25,14 @@ from iuem.usersandgroups import MessageFactory as _
 logger = logging.getLogger('iuem.usersandgroups')
 
 
-class IldapDirectory(form.Schema):
-    pass
+class IUser(form.Schema):
+    title = schema.TextLine(
+            title=_(u"user id"),
+            description=_("user id"),
+            required=True,
+            )
 
-class ldapDirectory(Container):
-    grok.implements(IldapDirectory)
+
+
+class User(Item):
+    grok.implements(IUser)

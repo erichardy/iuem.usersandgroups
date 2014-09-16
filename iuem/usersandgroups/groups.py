@@ -25,8 +25,9 @@ from iuem.usersandgroups import MessageFactory as _
 logger = logging.getLogger('iuem.usersandgroups')
 
 
-class IldapDirectory(form.Schema):
+class IGroups(form.Schema):
     pass
 
-class ldapDirectory(Container):
-    grok.implements(IldapDirectory)
+
+class Groups(Container):
+    grok.implements(IGroups)

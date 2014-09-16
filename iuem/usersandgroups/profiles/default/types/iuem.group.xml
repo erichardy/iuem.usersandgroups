@@ -1,29 +1,27 @@
 <?xml version="1.0"?>
-<object name="iuem.ldapdirectory"
+<object name="iuem.group"
    meta_type="Dexterity FTI"
    i18n:domain="iuem.usersandgroups" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">ldapdirectory</property>
+  <property name="title" i18n:translate="">iuemgroup</property>
   <property name="description"
-    i18n:translate="">ldapdirectory</property>
+    i18n:translate="">description of iuemgroup</property>
   <property name="icon_expr">string:${portal_url}/folder_icon.png</property>
-  <property name="factory">iuem.ldapdirectory</property>
-  <property name="global_allow">True</property>
-  <property name="filter_content_types">False</property>
+  <property name="factory">iuem.iuemgroup</property>
+  <property name="global_allow">False</property>
+  <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
-  	<!-- <element value="iuem.users" />
-	<element value="iuem.groups" /> -->
+  	<element value="iuem.group" />
   </property> />
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->
-  <property name="schema">iuem.usersandgroups.ldapdirectory.Ildapdirectory</property>
-  <property name="klass">iuem.usersandgroups.ldapdirectory.ldapdirector</property>
+  <property name="schema">iuem.usersandgroups.group.IGroup</property>
+  <property name="klass">iuem.usersandgroups.group.Group</property>
 
   <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />
-	 <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
      <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
    </property>
 

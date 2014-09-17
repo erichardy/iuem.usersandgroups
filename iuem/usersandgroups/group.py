@@ -27,11 +27,18 @@ logger = logging.getLogger('iuem.usersandgroups')
 
 class IGroup(form.Schema):
     title = schema.TextLine(
-            title=_(u"user id"),
-            description=_("user id"),
+            title=_(u"group id"),
             required=True,
             )
-
+    gid = schema.Int(
+          title=_(u'group number'),
+          required=True
+          )
+    more_users = schema.TextLine(
+            title=_(u"additional users in group"),
+            description=_(u"users list, separated by comma ','"),
+            required=False,
+            )
 
 
 class Group(Item):

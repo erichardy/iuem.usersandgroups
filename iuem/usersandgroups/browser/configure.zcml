@@ -4,6 +4,18 @@
     i18n_domain="iuem.usersandgroups">
 
     <!-- -*- extra stuff goes here -*- -->
+  <browser:page
+      for="iuem.usersandgroups.users.IUsers"
+      name="import-users-file"
+      class=".importusers.importUsers"
+      permission="zope2.View"
+      />
+  <browser:page
+      for="iuem.usersandgroups.groups.IGroups"
+      name="import-groups-file"
+      class=".importgroups.importGroups"
+      permission="zope2.View"
+      />
 
   <!-- EXAMPLE:
   <browser:viewlet

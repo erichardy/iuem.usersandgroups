@@ -31,7 +31,30 @@ class IUser(form.Schema):
             description=_("user id"),
             required=True,
             )
-
+    gid = schema.Int(
+          title=_(u'gid number'),
+          description=_(u"primary group"),
+          required=True)
+    ssid = schema.TextLine(
+            title=_(u"ssid"),
+            description=_("Samba SID"),
+            required=True,
+            )
+    shell = schema.TextLine(
+            title=_(u"user shell"),
+            description=_("shell launched at unix loggin"),
+            required=True,
+            )
+    arrival_date = schema.Datetime(
+            title=_(u"user arrival"),
+            description=_(u"when the user starts to work at IUEM"),
+            required=False,
+            )
+    departure_date = schema.Datetime(
+            title=_(u"user departure"),
+            description=_(u"when the user ends to work at IUEM"),
+            required=False,
+            )
 
 
 class User(Item):

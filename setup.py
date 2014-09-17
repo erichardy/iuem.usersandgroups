@@ -39,6 +39,7 @@ setup(
         'plone.app.registry',
         'collective.dexteritytextindexer',
         'plone.api',
+        'iuem.casldap',
         # -*- Extra requirements: -*-
     ],
     extras_require=dict(

@@ -40,13 +40,19 @@ class importUsers(form.SchemaForm):
                    shell=None,
                    arrival_date=None,
                    departure_date=None):
-        self.context.invokeFactory(type_name='iuem.user',
-                                   title=title,
-                                   gid=gid,
-                                   ssid=ssid,
-                                   shell=shell,
-                                   arrival_date=arrival_date,
-                                   departure_date=departure_date)
+        context = self.context
+        try:
+            context.invokeFactory('iuem.user',
+                                       title,
+                                       title=title,
+                                       gid=gid,
+                                       ssid=ssid,
+                                       shell=shell,
+                                       arrival_date=arrival_date,
+                                       departure_date=departure_date)
+        except:
+            logger.info('User already in directory:' + title)
+
         return
 
     def processUsers(self, data):
@@ -54,18 +60,32 @@ class importUsers(form.SchemaForm):
         users = data.split('\n')
         for user in users:
             luser = user.split(':')
-            title = luser[0]
-            gid = luser[1]
-            ssid = luser[2]
-            shell = luser[3]
-            arrival_date = luser[4]
-            departure_date = luser[5]
-            self.createUser(title=title,
-                            gid=gid,
-                            ssid=ssid,
-                            shell=shell,
-                            arrival_date=arrival_date,
-                            departure_date=departure_date)
+            logger.info(luser)
+            if len(luser) == 6:
+                title = luser[0]
+                try:
+                    gid = int(luser[1])
+                except:
+                    gid = 999
+                ssid = luser[2]
+                shell = luser[3]
+                arrival_date = luser[4]
+                """
+                if arrival_date == 'DATE_ARRIVEE':
+                    arrival_date = None
+                departure_date = luser[5]
+                if departure_date == 'DATE_DEPART':
+                    departure_date = None
+                """
+                # actuellement, on ne gere pas les dates arrivee et depart !
+                arrival_date = None
+                departure_date = None
+                self.createUser(title=title,
+                                gid=gid,
+                                ssid=ssid,
+                                shell=shell,
+                                arrival_date=arrival_date,
+                                departure_date=departure_date)
 
     @button.buttonAndHandler(u'Ok')
     def handleApply(self, action):

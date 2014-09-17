@@ -30,42 +30,40 @@ class importGroups(form.SchemaForm):
     schema = IImportGroups
     ignoreContext = True
 
-    label = _(u"import users file")
-    description = _(u"This will create a folder containing users")
+    label = _(u"import groups file")
+    description = _(u"This will create a folder containing groups")
 
-    def creatUser(self,
+    def creatGroup(self,
                    title=None,
                    gid=None,
-                   ssid=None,
-                   shell=None,
-                   arrival_date=None,
-                   departure_date=None):
-        self.context.invokeFactory(type_name='iuem.user',
+                   more_users=None,
+                   ):
+        self.context.invokeFactory('iuem.group',
+                                   title,
                                    title=title,
                                    gid=gid,
-                                   ssid=ssid,
-                                   shell=shell,
-                                   arrival_date=arrival_date,
-                                   departure_date=departure_date)
+                                   more_users=more_users,
+                                   )
         return
 
-    def processUsers(self, data):
+    def processGroups(self, data):
         # tunes = data.split('\n')
-        users = data.split('\n')
-        for user in users:
-            luser = user.split(':')
-            title = luser[0]
-            gid = luser[1]
-            ssid = luser[2]
-            shell = luser[3]
-            arrival_date = luser[4]
-            departure_date = luser[5]
-            self.createUser(title=title,
-                            gid=gid,
-                            ssid=ssid,
-                            shell=shell,
-                            arrival_date=arrival_date,
-                            departure_date=departure_date)
+        groups = data.split('\n')
+        for group in groups:
+            logger.info(group)
+            lgroup = group.split(':')
+            if len(lgroup) == 4:
+                title = lgroup[0]
+                try:
+                    gid = int(lgroup[2])
+                except:
+                    gid = 999
+                more_users = lgroup[3]
+                logger.info(group)
+                self.creatGroup(title=title,
+                                gid=gid,
+                                more_users=more_users,
+                                )
 
     @button.buttonAndHandler(u'Ok')
     def handleApply(self, action):
@@ -74,8 +72,8 @@ class importGroups(form.SchemaForm):
             self.status = self.formErrorsMessage
             return
 
-        users = data["users_file"].data
-        self.processUsers(users)
+        groups = data["groups_file"].data
+        self.processGroups(groups)
         self.status = "Thank you very much!"
         self.request.response.redirect(self.context.absolute_url())
 

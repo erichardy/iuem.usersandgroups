@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="iuem.usersandgroups">
+
+<head>
+<metal:js fill-slot="javascript_head_slot">
+</metal:js>
+</head>
+
+<body>
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main" tal:define="acl_users python:context.getAclUser()">
+
+blabla
+<p tal:content="python:acl_users.getServers()">getServers</p>
+
+<p tal:content="python:len(acl_users.getUserNames())">getUserNames</p>
+
+
+<p tal:content="python:acl_users.getUserById('hardy').dn">getUserById</p>
+
+<p tal:define="dn python:acl_users.getUserById('hardy').dn" tal:content="python:acl_users.getGroups(dn=dn)">groups</p>
+<script type="text/javascript">
+
+</script>
+
+</tal:main-macro>
+</metal:main>
+</body>
+</html>

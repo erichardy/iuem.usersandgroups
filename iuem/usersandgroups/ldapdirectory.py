@@ -26,7 +26,24 @@ logger = logging.getLogger('iuem.usersandgroups')
 
 
 class IldapDirectory(form.Schema):
-    pass
+    LDAPUserFolderName = schema.TextLine(
+            title=_(u"LDAPUserFolder name"),
+            description=_("The name of the LDAP directory to which this \
+                          folder is associated"),
+            default=u'annuaire-ldap-iuem',
+            required=True,
+            )
+
 
 class ldapDirectory(Container):
     grok.implements(IldapDirectory)
+
+    def getAclUser(self):
+        acl_users = self.acl_users[self.LDAPUserFolderName].acl_users
+        return acl_users
+
+
+class View(grok.View):
+    grok.context(IldapDirectory)
+    grok.require('zope2.View')
+    grok.template('view')

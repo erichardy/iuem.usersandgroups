@@ -26,15 +26,19 @@ logger = logging.getLogger('iuem.usersandgroups')
 
 
 class IUser(form.Schema):
+    form.primary('title')
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
             title=_(u"user id"),
             description=_("user id"),
             required=True,
             )
+    dexteritytextindexer.searchable('gid')
     gid = schema.Int(
           title=_(u'gid number'),
           description=_(u"primary group"),
-          required=True)
+          required=True
+          )
     ssid = schema.TextLine(
             title=_(u"ssid"),
             description=_("Samba SID"),

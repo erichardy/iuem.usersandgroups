@@ -26,14 +26,18 @@ logger = logging.getLogger('iuem.usersandgroups')
 
 
 class IGroup(form.Schema):
+    form.primary('title')
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
             title=_(u"group id"),
             required=True,
             )
+    dexteritytextindexer.searchable('gid')
     gid = schema.Int(
           title=_(u'group number'),
           required=True
           )
+    dexteritytextindexer.searchable('more_users')
     more_users = schema.TextLine(
             title=_(u"additional users in group"),
             description=_(u"users list, separated by comma ','"),

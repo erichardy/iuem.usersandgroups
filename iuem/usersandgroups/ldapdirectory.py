@@ -7,7 +7,7 @@ from plone import api
 from plone.directives import form
 
 from plone.supermodel import model
-from plone.dexterity.content import Container
+from plone.dexterity.content import Container, Item
 from zope.interface import alsoProvides
 from plone.autoform.interfaces import IFormFieldProvider
 from collective import dexteritytextindexer
@@ -39,7 +39,10 @@ class ldapDirectory(Container):
     grok.implements(IldapDirectory)
 
     def getAclUser(self):
-        acl_users = self.acl_users[self.LDAPUserFolderName].acl_users
+        try:
+            acl_users = self.acl_users[self.LDAPUserFolderName].acl_users
+        except:
+            return None
         return acl_users
 
 

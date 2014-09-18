@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <action-provider name="portal_workflow"/>
+ <action-provider name="portal_types"/>
+ <action-provider name="portal_actions" />
+
+<!--
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="create-all-mp3" meta_type="CMF Action" i18n:domain="collective.abcmusic">
+   <property name="title" i18n:translate="">Create all MP3</property>
+   <property name="description" i18n:translate="">Create MP3 for tunes in this folder if not yet present</property>
+   <property
+      name="url_expr">string:@@create-all-mp3</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">python:folder is object</property>
+   <property name="permissions">
+    <element value="Modify portal content"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+</object>
+-->
+
+<object name="object" meta_type="CMF Action Category">
+  <object name="import-users-file" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
+   <property name="title" i18n:translate="">import-users-file</property>
+   <property name="description" i18n:translate="">import-users-file</property>
+   <property
+      name="url_expr">string:${object_url}/@@import-users-file</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr"></property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="import-groups-file" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
+   <property name="title" i18n:translate="">import-groups-file</property>
+   <property name="description" i18n:translate="">import-groups-file</property>
+   <property
+      name="url_expr">string:${object_url}/@@import-groups-file</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr"></property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="misc-ldap-info" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
+   <property name="title" i18n:translate="">misc-ldap-info</property>
+   <property name="description" i18n:translate="">misc-ldap-info</property>
+   <property
+      name="url_expr">string:${object_url}/@@misc-ldap-info</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr"></property>
+   <property name="permissions">
+    <element value="Manage portal"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+</object>
+
+</object>

@@ -16,6 +16,13 @@
       class=".importgroups.importGroups"
       permission="zope2.View"
       />
+  <browser:page
+      for="iuem.usersandgroups.ldapdirectory.IldapDirectory"
+      name="misc-ldap-info"
+      class=".miscldapinfo.miscLdapInfo"
+      template="miscldapinfo.pt"
+      permission="zope2.View"
+      />
 
   <!-- EXAMPLE:
   <browser:viewlet

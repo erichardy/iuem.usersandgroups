@@ -17,7 +17,18 @@
                     tal:define="acl_users python:context.getAclUser();
                                 users python:acl_users.getUserIdsAndNames()">
 
+<p tal:content="python:acl_users.getServers()">getServers</p>
 
+<p tal:content="python:len(acl_users.getUserNames())">getUserNames</p>
+
+
+<p tal:content="python:acl_users.getUserById('hardy').dn">getUserById</p>
+
+<p tal:define="dn python:acl_users.getUserById('hardy').dn" tal:content="python:acl_users.getGroups(dn=dn)">groups</p>
+
+<p tal:define="schema python:acl_users.getLDAPSchema()" tal:content="string:${schema}">schema</p>
+
+<p tal:content="string:${users}">users</p>
 
 <script type="text/javascript">
 

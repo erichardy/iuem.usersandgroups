@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+pour ajout dans la liste des champs des Topics (old style), voir :
+/portal_atct/atct_manageTopicIndex
+
+et surtout la doc de :
+https://github.com/plone/plone.app.collection
+
+Les index ci-dessous ne servent qu'a creer des index dans le catalog
+Pour ajouter ces index dans les criteres de recherche, il faut :
+- pour les collections "nouveau" stype, utiliser les records dans registry.xml
+en precisant les operations a appliquer.
+NB: l'operation "contains" ne semble pas fonctionner, mais s'applique de la meme facon que
+l'operation "is"
+- pour les collections "ancien" style, pour ajouter des criteres, il faut utiliser l'URL
+portal_atct/atct_manageTopicIndex pour ajouter des champs sur lequels on pourra appliquer
+des recherches et des champs de metadonnees
+ VOIR aussi http://plone.org/documentation/kb/enable-collection-indices-fields-for-searching-for-custom-types
+ pour utiliser GenericSetup et le fichier portal_atct.xml
+ -->
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+  <index name="gid" meta_type="FieldIndex">
+    <indexed_attr value="gid"/>
+  </index>
+  <index name="more_users" meta_type="FieldIndex">
+    <indexed_attr value="more_users"/>
+  </index>
+
+  <column value="gid"/>
+  <column value="more_users"/>
+
+</object>
+

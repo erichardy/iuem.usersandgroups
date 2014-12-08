@@ -12,7 +12,7 @@
   <includeDependencies package="." />
   <include package="five.grok" />
   <grok:grok package="." />
-
+  <include file="permissions.zcml" />
   <include package=".browser" />
 
   <i18n:registerTranslations directory="locales" />

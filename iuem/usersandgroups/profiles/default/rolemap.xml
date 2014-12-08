@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<rolemap>
+ <roles>
+    <role name="Export Users and Group files"/>
+  </roles>
+
+  <permissions>
+    <permission name="iuem.ldap: get Users and Groups files" acquire="True">
+      <role name="Manager"/>
+      <role name="Site Administrator"/>
+	  <role name="Export Users and Group files"/>
+    </permission>
+  </permissions>
+</rolemap>

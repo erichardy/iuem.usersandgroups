@@ -28,10 +28,20 @@ logger = logging.getLogger('iuem.usersandgroups')
 class IldapDirectory(form.Schema):
     LDAPUserFolderName = schema.TextLine(
             title=_(u"LDAPUserFolder name"),
-            description=_("The name of the LDAP directory to which this \
-                          folder is associated"),
+            description=_("The name of the LDAP directory this \
+                          folder is associated to"),
             default=u'annuaire-ldap-iuem',
             required=True,
+            )
+    otherLDAP = schema.Text(
+            title=_(u'Other LDAP directories involved'),
+            description=_(u"used to avoid duplicates (one per line)"),
+            required=False
+            )
+    UseETCFiles = schema.Bool(
+            title=_(u"Enable import/export to Users and Group files"),
+            description=_(u"If enabled, users and groups folders \
+                            must be present or created later..."),
             )
 
 
@@ -40,10 +50,10 @@ class ldapDirectory(Container):
 
     def getAclUser(self):
         try:
-            acl_users = self.acl_users[self.LDAPUserFolderName].acl_users
+            aclUsers = self.acl_users[self.LDAPUserFolderName].acl_users
         except:
             return None
-        return acl_users
+        return aclUsers
 
 
 class View(grok.View):

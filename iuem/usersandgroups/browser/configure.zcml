@@ -17,6 +17,13 @@
       permission="zope2.View"
       />
   <browser:page
+      for="iuem.usersandgroups.groups.IGroups"
+      name="sync-groups"
+      class=".syncgroups.syncGroups"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="iuem.usersandgroups.ldapdirectory.IldapDirectory"
       name="misc-ldap-info"
       class=".miscldapinfo.miscLdapInfo"

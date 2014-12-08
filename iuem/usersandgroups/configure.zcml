@@ -26,6 +26,13 @@
       />
   <include file="upgrades.zcml" />
 
+  <browser:page
+       name="usersandgroups-settings"
+       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+       class=".controlpanel.UsersAndGroupsSettingsControlPanel"
+       permission="cmf.ManagePortal"
+    />
+
   <!-- -*- extra stuff goes here -*- -->
 
 </configure>

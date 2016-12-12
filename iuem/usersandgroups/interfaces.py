@@ -35,4 +35,25 @@ class IIUEMUsersAndGroupsSettings(Interface):
         required=True,
         default=u"ldap://annuaire-iuem.univ-brest.fr",
         )
-
+    users_base = schema.TextLine(
+        title=_(u"users branch base"),
+        description=_(u"in the form of : ou=people,dc=univ-brest,dc=fr"),
+        required=True,
+        default=u"ou=people,dc=univ-brest,dc=fr",
+        )
+    groups_base = schema.TextLine(
+        title=_(u"groups branch base"),
+        description=_(u"in the form of : ou=group,dc=univ-brest,dc=fr"),
+        required=True,
+        default=u"ou=group,dc=univ-brest,dc=fr",
+        )
+    min_gid = schema.Int(
+        title=_(u"minimum GID number"),
+        required=True,
+        default=600,
+        )
+    max_gid = schema.Int(
+        title=_(u"maximum GID number"),
+        required=True,
+        default=999,
+        )

@@ -4,7 +4,6 @@
 # http://pythonhosted.org/z3c.form/
 
 import logging
-from five import grok
 from plone.directives import form
 from z3c.form import button
 from Products.CMFCore.interfaces import ISiteRoot
@@ -25,7 +24,6 @@ class IImportGroups(form.Schema):
 
 
 class importGroups(form.SchemaForm):
-    grok.context(IGroups)
 
     schema = IImportGroups
     ignoreContext = True

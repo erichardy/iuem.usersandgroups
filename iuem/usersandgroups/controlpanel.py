@@ -4,26 +4,21 @@ from zope import schema
 from plone.supermodel import model
 from plone.app.registry.browser import controlpanel
 
+from iuem.usersandgroups.interfaces import IIUEMUsersAndGroupsSettings
 from iuem.usersandgroups import MessageFactory as _
 
 
-class IUsersAndGroupsSettings (Interface):
-    # fileds do display ????
-    # make fieldsets
-    pass
-
-
-class UsersAndGroupsSettingsForm(controlpanel.RegistryEditForm):
-    schema = IUsersAndGroupsSettings
-    label = _(u"ZABrI Projects Settings")
-    description = _(u"ZabriProjectSettingsDescription")
+class IUEMUsersAndGroupsSettingsForm(controlpanel.RegistryEditForm):
+    schema = IIUEMUsersAndGroupsSettings
+    label = _(u"Users and groups managment")
+    description = _(u"IuemUsersAndGroupsSettingsDescription")
 
     def updateFields(self):
-        super(UsersAndGroupsSettingsForm, self).updateFields()
+        super(IUEMUsersAndGroupsSettingsForm, self).updateFields()
 
     def updateWidgets(self):
-        super(UsersAndGroupsSettingsForm, self).updateWidgets()
+        super(IUEMUsersAndGroupsSettingsForm, self).updateWidgets()
 
 
-class UsersAndGroupsSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
-    form = UsersAndGroupsSettingsForm
+class IUEMUsersAndGroupsSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
+    form = IUEMUsersAndGroupsSettingsForm

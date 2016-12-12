@@ -3,7 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="iuem.usersandgroups">
 
-    <!-- -*- extra stuff goes here -*- -->
+    <!-- -*- extra stuff goes here -*- 
   <browser:page
       for="iuem.usersandgroups.users.IUsers"
       name="import-users-file"
@@ -30,7 +30,7 @@
       template="miscldapinfo.pt"
       permission="zope2.View"
       />
-
+-->
   <!-- EXAMPLE:
   <browser:viewlet
       name="iuem.someviewlet"

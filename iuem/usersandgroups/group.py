@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from five import grok
 from plone import api
 # from plone.directives import dexterity, form
 from plone.directives import form
@@ -46,4 +45,3 @@ class IGroup(form.Schema):
 
 
 class Group(Item):
-    grok.implements(IGroup)

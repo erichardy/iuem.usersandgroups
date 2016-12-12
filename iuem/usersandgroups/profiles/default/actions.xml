@@ -22,46 +22,5 @@
 </object>
 -->
 
-<object name="object" meta_type="CMF Action Category">
-  <object name="import-users-file" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
-   <property name="title" i18n:translate="">import-users-file</property>
-   <property name="description" i18n:translate="">import-users-file</property>
-   <property
-      name="url_expr">string:${object_url}/@@import-users-file</property>
-   <property name="icon_expr"></property>
-   <property name="available_expr"></property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-
-  <object name="import-groups-file" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
-   <property name="title" i18n:translate="">import-groups-file</property>
-   <property name="description" i18n:translate="">import-groups-file</property>
-   <property
-      name="url_expr">string:${object_url}/@@import-groups-file</property>
-   <property name="icon_expr"></property>
-   <property name="available_expr"></property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-
-  <object name="misc-ldap-info" meta_type="CMF Action" i18n:domain="iuem.usersandgroups">
-   <property name="title" i18n:translate="">misc-ldap-info</property>
-   <property name="description" i18n:translate="">misc-ldap-info</property>
-   <property
-      name="url_expr">string:${object_url}/@@misc-ldap-info</property>
-   <property name="icon_expr"></property>
-   <property name="available_expr"></property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-
-</object>
 
 </object>

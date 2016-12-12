@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from five import grok
 from plone import api
 # from plone.directives import dexterity, form
 from plone.directives import form
@@ -30,4 +29,3 @@ class IUsers(form.Schema):
 
 
 class Users(Container):
-    grok.implements(IUsers)

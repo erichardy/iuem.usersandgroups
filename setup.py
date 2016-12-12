@@ -16,12 +16,9 @@ setup(
         "Operating System :: OS Independent",
         "Framework :: Zope2",
         "Framework :: Plone",
-        "Framework :: Plone :: 4.0",
-        "Framework :: Plone :: 4.1",
-        "Framework :: Plone :: 4.2",
+        "Framework :: Plone :: 5.0",
         "Framework :: Plone :: 4.3",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
     ],
     keywords='',
@@ -35,11 +32,8 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'plone.app.dexterity[grok]',
-        'plone.app.registry',
-        'collective.dexteritytextindexer',
+        'python_ldap',
         'plone.api',
-        'iuem.casldap',
         # -*- Extra requirements: -*-
     ],
     extras_require=dict(

@@ -9,11 +9,5 @@
 <object name="portal_types" meta_type="Plone Types Tool">
   <!-- -*- extra stuff goes here -*- -->
 
-  <object name="iuem.user" meta_type="Dexterity FTI" />
-  <object name="iuem.users" meta_type="Dexterity FTI" />
-  <object name="iuem.group" meta_type="Dexterity FTI" />
-  <object name="iuem.groups" meta_type="Dexterity FTI" />
-
-  <object name="iuem.ldapdirectory" meta_type="Dexterity FTI" />
 
 </object>

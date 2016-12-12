@@ -1,9 +1,0 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    i18n_domain="iuem.annuaire">
-
-  <permission
-    id="iuem_LDAP.getFiles"
-    title="iuem.ldap: get Users and Groups files"
-  />
-</configure>

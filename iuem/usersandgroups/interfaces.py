@@ -72,13 +72,23 @@ class IiuemUser(Interface):
     """Interface of IUEM user object
     """
 
+    dn = Attribute("dn")
+    uid = Attribute("uid")
+    cn = Attribute("cn")
+    mail = Attribute("mail")
+    pw = Attribute("userPassword")
+    uidNumber = Attribute("uidNumber")
+    gidNumber = Attribute("gidNumber")
+
+
 class IiuemGroup(Interface):
     """Interface of IUEM group object
     """
 
     dn = Attribute("dn")
-    dn = Attribute("cn")
-    gid = Attribute("gid")
+    cn = Attribute("cn")
+    gidNumber = Attribute("gidNumber")
+    description  = Attribute("description")
     members = Attribute("members list")
 
     def includesMembers(membersList):

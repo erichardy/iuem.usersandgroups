@@ -15,6 +15,7 @@ from node.ext.ldap import SUBTREE
 
 from plone import api
 
+from iuem.usersandgroups.iuemuser import iuemUser
 from iuem.usersandgroups.iuemgroup import iuemGroup
 logger = logging.getLogger('iuem.usersandgroups.tebl:utils')
 
@@ -59,30 +60,32 @@ def getLdapCommunicator(base):
     else:
         comm.baseDN = getSettingValue('groups_base')
     comm.bind()
+    return comm
 
-def getUserByUID(uidNumber):
+def getUserByUID(uid):
     """
     :param gidNumber: le GID d'un groupe LDAP
     :type gidNumber: integer
     :returns: un objet de la classe ``ldapGroup`` ou None s'il n'y a pas de
         groupe qui correspond au GID.
     """
-    LDAP_SERVER = getSettingValue('ldap_uri')
-    LDAP_USERS_BASE = getSettingValue('users_base')
     ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
-    l = ldap.initialize(LDAP_SERVER)
-    search_filter = 'uid=%s' % uidNumber
-    #
-    # Cas special : root
-    if uidNumber == 0:
-        return 'root'
-
+    comm = getLdapCommunicator("u")
+    search_filter = 'uid=%s' % uid
     try:
-        results = l.search_s(LDAP_USERS_BASE,
-                             ldap.SCOPE_SUBTREE,
-                             search_filter,
-                             ['cn', 'uid'])
-        return results[0][1]['uid'][0]
+        results = comm.search(search_filter , SUBTREE)
+        # return results[0][1]['uid'][0]
+        result = results[0][1]
+        user = iuemUser()
+        user.dn = results[0][0]
+        user.cn = result.get('cn')
+        user.uid = result.get('uid')
+        user.mail = result.get('mail')
+        user.pw = result.get('userPassword')
+        user.uidNumber = result.get('uidNumber')
+        user.gidNumber = result.get('gidNumber')
+        return user
+        
     except Exception:
         return None
 

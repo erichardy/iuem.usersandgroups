@@ -17,6 +17,7 @@ from plone import api
 
 from iuem.usersandgroups.iuemuser import iuemUser
 from iuem.usersandgroups.iuemgroup import iuemGroup
+from pygments.unistring import Ps
 logger = logging.getLogger('iuem.usersandgroups.tebl:utils')
 
 
@@ -69,7 +70,6 @@ def getUserByUID(uid):
     :returns: un objet de la classe ``ldapGroup`` ou None s'il n'y a pas de
         groupe qui correspond au GID.
     """
-    ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
     comm = getLdapCommunicator("u")
     search_filter = 'uid=%s' % uid
     try:
@@ -78,16 +78,37 @@ def getUserByUID(uid):
         result = results[0][1]
         user = iuemUser()
         user.dn = results[0][0]
-        user.cn = result.get('cn')
-        user.uid = result.get('uid')
-        user.mail = result.get('mail')
-        user.pw = result.get('userPassword')
-        user.uidNumber = result.get('uidNumber')
-        user.gidNumber = result.get('gidNumber')
+        user.cn = result.get('cn')[0]
+        user.uid = result.get('uid')[0]
+        user.mail = result.get('mail')[0]
+        user.pw = result.get('userPassword')[0]
+        user.uidNumber = result.get('uidNumber')[0]
+        user.gidNumber = result.get('gidNumber')[0]
         return user
         
     except Exception:
         return None
+
+
+def getIuemGroups():
+    """
+    :returns: liste d'objets de type iuemGroup
+    """
+    comm = getLdapCommunicator("group")
+    search_filter = 'objectClass=posixGroup'
+    results = comm.search(search_filter , SUBTREE)
+    groups = []
+    for result in results:
+        g = iuemGroup()
+        g.dn = result[0]
+        attrs = result[1]
+        g.cn = attrs.get('cn')[0]
+        g.gidNumber = attrs.get('gidNumber')[0]
+        g.description = attrs.get('description')[0]
+        g.members = attrs.get('memberUid')
+        groups.append(g)
+    return groups
+    
 
 
 def getGroupByGID(gidNumber):
@@ -97,15 +118,9 @@ def getGroupByGID(gidNumber):
     :returns: un objet de la classe ``iuemGroup`` ou None s'il n'y a pas de
         groupe qui correspond au GID.
     """
-    ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
-    LDAP_SERVER = getSettingValue('ldap_uri')
-    LDAP_GROUPS_BASE = getSettingValue('groups_base')
-    conn = ldap.initialize(LDAP_SERVER)
+    comm = getLdapCommunicator("group")
     search_filter = 'gidNumber=%s' % gidNumber
-    results = conn.search_s(LDAP_GROUPS_BASE,
-                            ldap.SCOPE_SUBTREE,
-                            search_filter,
-                            ['cn', 'memberUid'])
+    results = comm.search(search_filter , SUBTREE)
     group = iuemGroup()
     group.gid = gidNumber
     group.dn = results[0][0]
@@ -116,6 +131,36 @@ def getGroupByGID(gidNumber):
         except Exception:
             group.members = []
     return group
+
+
+def getGroupByCN(cn):
+    """
+    :param cn: le cn d'un groupe LDAP
+    :type cn: str
+    :returns: un objet de la classe ``iuemGroup`` ou None s'il n'y a pas de
+        groupe qui correspond au GID.
+    """
+    comm = getLdapCommunicator("group")
+    search_filter = 'cn=%s' % cn
+    results = comm.search(search_filter , SUBTREE)
+    group = iuemGroup()
+    
+    group.dn = results[0][0]
+    result = results[0][1]
+    group.cn = result.get('cn')[0]
+    group.gidNumber = result.get('gidNumber')[0]
+    group.description = result.get('description')[0]
+    group.members = result.get('memberUid')
+    return group
+
+def getIuemMembers(gidNumber):
+    """
+    :param gidNumber: gid Number du groupe
+    :type gidNumber: int
+    :returns: list d'objets ``iuemUser`` des membres du groupe
+    """
+    pass
+
 
 
 """

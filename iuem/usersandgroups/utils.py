@@ -204,6 +204,43 @@ def createGroup(iuem_group):
     return group
 
 
+def delete_group_and_users(group_cn):
+    """
+    Supprime les utilisateurs d'un groupe donné. Si un utilisateur ne fait
+    pas partie d'un autre groupe, il est supprimé aussi. Supprime aussi le
+    le groupe. On prend aussi en compte qu'il peut y avoir un groupe local
+    qui a été créé, indépendant des groupes LDAP. Donc, si un utilisateur
+    fait partie de l'un de ces groupes locaux (autre
+    que ``AuthenticatedUsers``), on ne supprime pas l'utilisateur
+
+    :param iuem_group: le groupe d'où sont tirés les noms des users
+    :type iuem_group: objet ``iuemGroup``
+    :returns: ``True`` si pas de problème, ``False`` sinon.
+    """
+    plone_group = api.group.get(groupname=group_cn)
+    # on commence par supprimer les utilisateurs qui ne font pas partie
+    # d'un autre groupe
+    if not plone_group:
+        logger.info("Group %s doesn't exist" % group_cn)
+        return False
+    members = api.user.get_users(groupname=group_cn)
+    for member in members:
+        uid = member.id
+        plone_groups = api.group.get_groups(username=uid)
+        # si seulement 2 groupes, AuthenticatedUsers et group_cn
+        # on supprime
+        if len(plone_groups) == 2:
+            api.user.delete(username=uid)
+        else:
+            logger.info('GARDER %s ' % uid)
+    api.group.delete(groupname=group_cn)
+    try:
+        transaction.commit()
+        return True
+    except Exception:
+        return False
+
+
 def update_users_password():
     users = api.user.get_users()
     portal = api.portal.get()

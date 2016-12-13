@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from zope.interface import Interface
-from zope import schema
-from plone.supermodel import model
+
 from plone.app.registry.browser import controlpanel
 
 from iuem.usersandgroups.interfaces import IIUEMUsersAndGroupsSettings
@@ -20,5 +18,6 @@ class IUEMUsersAndGroupsSettingsForm(controlpanel.RegistryEditForm):
         super(IUEMUsersAndGroupsSettingsForm, self).updateWidgets()
 
 
-class IUEMUsersAndGroupsSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
+class IUEMUsersAndGroupsSettingsControlPanel(
+        controlpanel.ControlPanelFormWrapper):
     form = IUEMUsersAndGroupsSettingsForm

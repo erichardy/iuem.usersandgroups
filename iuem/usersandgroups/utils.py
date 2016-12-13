@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
-# from dialog import Dialog
-import os
-import ldap
-
 import logging
-import stat
-import sys
+
 from node.ext.ldap import LDAPProps
 from node.ext.ldap import LDAPConnector
 from node.ext.ldap import LDAPCommunicator
@@ -17,7 +11,7 @@ from plone import api
 
 from iuem.usersandgroups.iuemuser import iuemUser
 from iuem.usersandgroups.iuemgroup import iuemGroup
-from pygments.unistring import Ps
+
 logger = logging.getLogger('iuem.usersandgroups.tebl:utils')
 
 
@@ -36,15 +30,17 @@ def getSettingValue(record):
         logger.info("Cannot get Registry record: " + record)
         return u""
 
+
 def getLdapProps():
     uri = getSettingValue('ldap_uri')
-    admin =  getSettingValue('manager_dn')
+    admin = getSettingValue('manager_dn')
     pw = getSettingValue('manager_pw')
     props = LDAPProps(uri=uri,
                       user=admin,
                       password=pw,
                       cache=False)
     return props
+
 
 def getLdapCommunicator(base):
     """
@@ -63,6 +59,7 @@ def getLdapCommunicator(base):
     comm.bind()
     return comm
 
+
 def getUserByUID(uid):
     """
     :param gidNumber: le GID d'un groupe LDAP
@@ -73,7 +70,7 @@ def getUserByUID(uid):
     comm = getLdapCommunicator("u")
     search_filter = 'uid=%s' % uid
     try:
-        results = comm.search(search_filter , SUBTREE)
+        results = comm.search(search_filter, SUBTREE)
         # return results[0][1]['uid'][0]
         result = results[0][1]
         user = iuemUser()
@@ -85,7 +82,6 @@ def getUserByUID(uid):
         user.uidNumber = result.get('uidNumber')[0]
         user.gidNumber = result.get('gidNumber')[0]
         return user
-        
     except Exception:
         return None
 
@@ -96,7 +92,7 @@ def getIuemGroups():
     """
     comm = getLdapCommunicator("group")
     search_filter = 'objectClass=posixGroup'
-    results = comm.search(search_filter , SUBTREE)
+    results = comm.search(search_filter, SUBTREE)
     groups = []
     for result in results:
         g = iuemGroup()
@@ -108,7 +104,6 @@ def getIuemGroups():
         g.members = attrs.get('memberUid')
         groups.append(g)
     return groups
-    
 
 
 def getGroupByGID(gidNumber):
@@ -120,7 +115,7 @@ def getGroupByGID(gidNumber):
     """
     comm = getLdapCommunicator("group")
     search_filter = 'gidNumber=%s' % gidNumber
-    results = comm.search(search_filter , SUBTREE)
+    results = comm.search(search_filter, SUBTREE)
     group = iuemGroup()
     group.gid = gidNumber
     group.dn = results[0][0]
@@ -142,9 +137,8 @@ def getGroupByCN(cn):
     """
     comm = getLdapCommunicator("group")
     search_filter = 'cn=%s' % cn
-    results = comm.search(search_filter , SUBTREE)
+    results = comm.search(search_filter, SUBTREE)
     group = iuemGroup()
-    
     group.dn = results[0][0]
     result = results[0][1]
     group.cn = result.get('cn')[0]
@@ -153,6 +147,7 @@ def getGroupByCN(cn):
     group.members = result.get('memberUid')
     return group
 
+
 def getIuemMembers(gidNumber):
     """
     :param gidNumber: gid Number du groupe
@@ -160,7 +155,6 @@ def getIuemMembers(gidNumber):
     :returns: list d'objets ``iuemUser`` des membres du groupe
     """
     pass
-
 
 
 """

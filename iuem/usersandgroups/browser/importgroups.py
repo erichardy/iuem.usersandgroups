@@ -6,12 +6,8 @@
 import logging
 from plone.directives import form
 from z3c.form import button
-from Products.CMFCore.interfaces import ISiteRoot
 from plone.namedfile.field import NamedFile
-from zope.component import getUtility
 
-from plone.i18n.normalizer.interfaces import INormalizer
-from iuem.usersandgroups.groups import IGroups
 from iuem.usersandgroups import MessageFactory as _
 
 logger = logging.getLogger('iuem.usersandgroups')

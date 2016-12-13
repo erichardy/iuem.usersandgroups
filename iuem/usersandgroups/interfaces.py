@@ -5,18 +5,7 @@ import logging
 from zope import schema
 from zope.interface import Interface
 from zope.interface import Attribute
-from zope.interface import provider
-from zope.interface import Invalid, invariant
-from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from z3c.form.interfaces import IEditForm
-from z3c.relationfield.schema import RelationChoice
-
-from plone.supermodel import model
-# from plone.registry.field import SourceText
-from plone.autoform import directives as form
-import datetime
-
 
 from iuem.usersandgroups import MessageFactory as _
 
@@ -59,14 +48,17 @@ class IIUEMUsersAndGroupsSettings(Interface):
         )
     min_gid = schema.Int(
         title=_(u"minimum GID number"),
+        description=_(u"not uset yet"),
         required=True,
         default=600,
         )
     max_gid = schema.Int(
         title=_(u"maximum GID number"),
+        description=_(u"not uset yet"),
         required=True,
         default=999,
         )
+
 
 class IiuemUser(Interface):
     """Interface of IUEM user object
@@ -88,7 +80,7 @@ class IiuemGroup(Interface):
     dn = Attribute("dn")
     cn = Attribute("cn")
     gidNumber = Attribute("gidNumber")
-    description  = Attribute("description")
+    description = Attribute("description")
     members = Attribute("members list")
 
     def includesMembers(membersList):

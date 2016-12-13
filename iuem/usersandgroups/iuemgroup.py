@@ -3,10 +3,10 @@
 import logging
 from zope.interface import implements
 
-from plone import api
+# from plone import api
 
 from iuem.usersandgroups.interfaces import IiuemGroup
-from iuem.usersandgroups import MessageFactory as _
+# from iuem.usersandgroups import MessageFactory as _
 
 logger = logging.getLogger('iuem.usersandgroups:iuemGroup')
 

@@ -6,12 +6,8 @@
 import logging
 from plone.directives import form
 from z3c.form import button
-from Products.CMFCore.interfaces import ISiteRoot
 from plone.namedfile.field import NamedFile
-from zope.component import getUtility
 
-from plone.i18n.normalizer.interfaces import INormalizer
-from iuem.usersandgroups.users import IUsers
 from iuem.usersandgroups import MessageFactory as _
 
 logger = logging.getLogger('iuem.usersandgroups')
@@ -41,13 +37,13 @@ class importUsers(form.SchemaForm):
         context = self.context
         try:
             context.invokeFactory('iuem.user',
-                                       title,
-                                       title=title,
-                                       gid=gid,
-                                       ssid=ssid,
-                                       shell=shell,
-                                       arrival_date=arrival_date,
-                                       departure_date=departure_date)
+                                  title,
+                                  title=title,
+                                  gid=gid,
+                                  ssid=ssid,
+                                  shell=shell,
+                                  arrival_date=arrival_date,
+                                  departure_date=departure_date)
         except:
             logger.info('User already in directory:' + title)
 

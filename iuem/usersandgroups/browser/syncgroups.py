@@ -2,9 +2,8 @@
 
 import logging
 from zope.publisher.browser import BrowserView
-from AccessControl import getSecurityManager
-from Products.CMFCore import permissions
-from iuem.usersandgroups import MessageFactory as _
+
+# from iuem.usersandgroups import MessageFactory as _
 
 logger = logging.getLogger('iuem.usersandgroups.browser.syncgroups')
 
@@ -18,7 +17,5 @@ class syncGroups(BrowserView):
         groupIds = context.keys()
         for group in groups:
             groupId = group[0]
-            if not groupId in groupIds:
+            if groupId not in groupIds:
                 logger.info('must create ' + groupId)
-
-

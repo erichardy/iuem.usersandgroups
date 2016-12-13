@@ -2,18 +2,16 @@
 
 import logging
 from zope.publisher.browser import BrowserView
-from AccessControl import getSecurityManager
-from Products.CMFCore import permissions
 import transaction
 
 from plone import api
 
-from iuem.usersandgroups.utils import getGroupByGID
+# from iuem.usersandgroups.utils import getGroupByGID
 from iuem.usersandgroups.utils import getUserByUID
-from iuem.usersandgroups.utils import getIuemGroups
+# from iuem.usersandgroups.utils import getIuemGroups
 from iuem.usersandgroups.utils import getGroupByCN
 
-from iuem.usersandgroups import MessageFactory as _
+# from iuem.usersandgroups import MessageFactory as _
 
 logger = logging.getLogger('iuem.usersandgroups')
 
@@ -30,7 +28,6 @@ class manageUsers(BrowserView):
         # self.delete_group_and_users('feiri')
         self.update_users_password()
         # import pdb;pdb.set_trace()
-        
 
     def create_group_and_users(self, group_cn):
         """
@@ -43,14 +40,13 @@ class manageUsers(BrowserView):
         group = api.group.get(groupname=group_cn)
         iuem_group = getGroupByCN(group_cn)
         if not group:
-            plone_group = self.createGroup(iuem_group)
+            self.createGroup(iuem_group)
         for u in iuem_group.members:
             iuem_user = getUserByUID(u)
             try:
-                dn = iuem_user.dn
                 if not api.user.get(username=iuem_user.uid):
                     props = dict(fullname=iuem_user.cn)
-                    user = api.user.create(
+                    api.user.create(
                         username=iuem_user.uid,
                         email=iuem_user.mail,
                         properties=props)
@@ -79,7 +75,6 @@ class manageUsers(BrowserView):
         :type iuem_group: objet ``iuemGroup``
         :returns: ``True`` si pas de problème, ``False`` sinon.
         """
-        portal = api.portal.get()
         plone_group = api.group.get(groupname=group_cn)
         # on commence par supprimer les utilisateurs qui ne font pas partie
         # d'un autre groupe

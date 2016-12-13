@@ -3,6 +3,13 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="iuem.usersandgroups">
 
+  <browser:page
+      for="*"
+      name="manage-users"
+      class=".manage_users.manageUsers"
+      permission="cmf.ManagePortal"
+      />
+
     <!-- -*- extra stuff goes here -*- 
   <browser:page
       for="iuem.usersandgroups.users.IUsers"

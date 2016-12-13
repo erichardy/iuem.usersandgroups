@@ -32,6 +32,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'node.ext.ldap',
         'python_ldap',
         'plone.api',
         # -*- Extra requirements: -*-

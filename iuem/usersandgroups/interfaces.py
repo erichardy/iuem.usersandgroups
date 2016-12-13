@@ -4,6 +4,7 @@ import logging
 
 from zope import schema
 from zope.interface import Interface
+from zope.interface import Attribute
 from zope.interface import provider
 from zope.interface import Invalid, invariant
 from zope.schema.interfaces import IContextAwareDefaultFactory
@@ -19,7 +20,7 @@ import datetime
 
 from iuem.usersandgroups import MessageFactory as _
 
-logger = logging.getLogger('ubl.tebl:interfaces')
+logger = logging.getLogger('iuem.usersandgroups.tebl:interfaces')
 #
 
 
@@ -34,6 +35,15 @@ class IIUEMUsersAndGroupsSettings(Interface):
         description=_(u"in the form of : ldap://...."),
         required=True,
         default=u"ldap://annuaire-iuem.univ-brest.fr",
+        )
+    manager_dn = schema.TextLine(
+        title=_(u"manager dn"),
+        required=True,
+        default=u"cn=admin,dc=univ-brest,dc=fr"
+        )
+    manager_pw = schema.Password(
+        title=_(u"manager password"),
+        required=True
         )
     users_base = schema.TextLine(
         title=_(u"users branch base"),
@@ -57,3 +67,20 @@ class IIUEMUsersAndGroupsSettings(Interface):
         required=True,
         default=999,
         )
+
+class IiuemUser(Interface):
+    """Interface of IUEM user object
+    """
+
+class IiuemGroup(Interface):
+    """Interface of IUEM group object
+    """
+
+    dn = Attribute("dn")
+    dn = Attribute("cn")
+    gid = Attribute("gid")
+    members = Attribute("members list")
+
+    def includesMembers(membersList):
+        """returns True if membersList is included in members
+        """

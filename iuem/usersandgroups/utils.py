@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import transaction
 
 from node.ext.ldap import LDAPProps
 from node.ext.ldap import LDAPConnector
@@ -13,6 +14,8 @@ from iuem.usersandgroups.iuemuser import iuemUser
 from iuem.usersandgroups.iuemgroup import iuemGroup
 
 logger = logging.getLogger('iuem.usersandgroups.tebl:utils')
+
+# Misc utilities
 
 
 def getSettingValue(record):
@@ -29,6 +32,8 @@ def getSettingValue(record):
     except Exception:
         logger.info("Cannot get Registry record: " + record)
         return u""
+
+# Ldap utilities
 
 
 def getLdapProps():
@@ -147,14 +152,66 @@ def getGroupByCN(cn):
     group.members = result.get('memberUid')
     return group
 
+# Plone utilities
 
-def getIuemMembers(gidNumber):
+
+def create_group_and_users(group_cn):
     """
-    :param gidNumber: gid Number du groupe
-    :type gidNumber: int
-    :returns: list d'objets ``iuemUser`` des membres du groupe
+    :param iuem_group: le groupe d'où sont tirés les noms des users
+    :type iuem_group: objet ``iuemGroup``
+    :returns: ``True`` si pas de problème, ``False`` sinon.
     """
-    pass
+    portal = api.portal.get()
+    pwds = portal.acl_users.source_users._user_passwords
+    group = api.group.get(groupname=group_cn)
+    iuem_group = getGroupByCN(group_cn)
+    if not group:
+        createGroup(iuem_group)
+    for u in iuem_group.members:
+        iuem_user = getUserByUID(u)
+        try:
+            if not api.user.get(username=iuem_user.uid):
+                props = dict(fullname=iuem_user.cn)
+                api.user.create(
+                    username=iuem_user.uid,
+                    email=iuem_user.mail,
+                    properties=props)
+                # transaction.commit()
+                pwds[iuem_user.uid] = iuem_user.pw
+                # transaction.commit()
+            api.group.add_user(groupname=group_cn, username=iuem_user.uid)
+        except Exception:
+            logger.info('error: %s' % u)
+    try:
+        transaction.commit()
+        return True
+    except Exception:
+        return False
+
+
+def createGroup(iuem_group):
+    """
+    :param iuem_group: le groupe à créer
+    :type iuem_group: ``iuemGroup``
+    :returns: l'objet ``group`` de plone
+    """
+    group = api.group.create(
+        groupname=iuem_group.cn,
+        title=iuem_group.cn,
+        description=iuem_group.description,
+        roles=['Member', ],
+        )
+    return group
+
+
+def update_users_password():
+    users = api.user.get_users()
+    portal = api.portal.get()
+    pwds = portal.acl_users.source_users._user_passwords
+    for user in users:
+        uid = user.id
+        iuem_user = getUserByUID(uid)
+        pwds[uid] = iuem_user.pw
 
 
 """

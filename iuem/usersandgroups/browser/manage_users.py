@@ -2,9 +2,6 @@
 
 import logging
 from zope.publisher.browser import BrowserView
-import transaction
-
-from plone import api
 
 from iuem.usersandgroups import utils
 
@@ -25,4 +22,3 @@ class manageUsers(BrowserView):
         # utils.delete_group_and_users('feiri')
         utils.update_users_password()
         # import pdb;pdb.set_trace()
-

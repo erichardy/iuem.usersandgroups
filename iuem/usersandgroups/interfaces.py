@@ -58,9 +58,9 @@ class IIUEMUsersAndGroupsSettings(Interface):
         required=True,
         default=999,
         )
-    pw_update_key = schema.TextLine(
-        title=_(u"key for passwords update by crontab"),
-        description=_(u"a string without spaces for ease to use"),
+    updates_key = schema.TextLine(
+        title=_(u"key for updates by crontab"),
+        description=_(u"a string without spaces for easier usage"),
         required=True,
         default=u"abcdef"
         )

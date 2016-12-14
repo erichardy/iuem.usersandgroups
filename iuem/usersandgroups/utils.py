@@ -83,6 +83,7 @@ def getUserByUID(uid):
         results = comm.search(search_filter, SUBTREE)
         # return results[0][1]['uid'][0]
         result = results[0][1]
+        import pdb;pdb.set_trace()
         user = iuemUser()
         user.dn = results[0][0]
         user.cn = result.get('cn')[0]
@@ -95,6 +96,69 @@ def getUserByUID(uid):
     except Exception:
         return None
 
+
+def createUser(uid):
+    """
+    Crée un utilisateur Plone à partir de son compte
+    dans l'annuaire ``LDAP``. Si l'``UID`` existe déjà,
+    rien n'est fait, on retourne l'utilisateur.
+    :param uid: uid ``ldap`` d'un utilisateur
+    :type uid: str
+    :returns: l'utilisateur créé ou déjà existant,
+        ``None`` si pas d'utilisateur
+    """
+    iuem_user = getUserByUID(uid)
+    if not iuem_user:
+        logger.info('user %s cannot be updated' % uid)
+        return None
+    logger.info(uid)
+    plone_user = api.user.get(username=iuem_user.uid)
+    if plone_user:
+        return plone_user
+    try:
+        portal = api.portal.get()
+        pwds = portal.acl_users.source_users._user_passwords
+        props = dict(fullname=iuem_user.cn)
+        plone_user = api.user.create(
+            username=iuem_user.uid,
+            email=iuem_user.mail,
+            properties=props)
+        # transaction.commit()
+        pwds[iuem_user.uid] = iuem_user.pw
+        transaction.commit()
+        return plone_user
+    except Exception:
+        return None
+
+
+def removeUserFromGroup(uid, gid):
+    """
+    On n'opère ici que sur les groupes de Plone. Cette
+    fonction est utilisée pour la synchronisation entre
+    les groupes LDAP et les groupes Plone.
+
+    Si l'utilisateur ne fait pas partir d'autres groupes,
+    le compte est supprimé.
+    :param uid: user ID ou cn d'un utilisateur
+    :type uid: str
+    :param gid: nom d'un groupe
+    :type gid: str
+    :returns: le groupe plone mis à jour, ou ``None``
+        si opération pas possible
+    """
+    api.group.remove_user(groupname=gid, username=uid)
+    try:
+        user_groups = api.group.get_groups(username=uid)
+    except Exception:
+        return None
+    # si seulement le groupe AuthenticatedUsers, on supprime
+    if len(user_groups) == 1:
+        try:
+            api.user.delete(username=uid)
+        except Exception:
+            return None
+    plone_group = api.group.get(groupname=gid)
+    return plone_group
 
 def getIuemGroups():
     """
@@ -149,44 +213,33 @@ def getGroupByCN(cn):
     search_filter = 'cn=%s' % cn
     results = comm.search(search_filter, SUBTREE)
     group = iuemGroup()
-    group.dn = results[0][0]
-    result = results[0][1]
-    group.cn = result.get('cn')[0]
-    group.gidNumber = result.get('gidNumber')[0]
-    group.description = result.get('description')[0]
-    group.members = result.get('memberUid')
-    return group
+    try:
+        group.dn = results[0][0]
+        result = results[0][1]
+        group.cn = result.get('cn')[0]
+        group.gidNumber = result.get('gidNumber')[0]
+        group.description = result.get('description')[0]
+        group.members = result.get('memberUid')
+        return group
+    except Exception:
+        return None
 
 # Plone utilities
 
 
-def create_group_and_users(group_cn):
+def createGroupAndUsers(group_cn):
     """
     :param iuem_group: le groupe d'où sont tirés les noms des users
     :type iuem_group: objet ``iuemGroup``
     :returns: ``True`` si pas de problème, ``False`` sinon.
     """
-    portal = api.portal.get()
-    pwds = portal.acl_users.source_users._user_passwords
-    group = api.group.get(groupname=group_cn)
+    plone_group = api.group.get(groupname=group_cn)
     iuem_group = getGroupByCN(group_cn)
-    if not group:
+    if not plone_group:
         createGroup(iuem_group)
     for u in iuem_group.members:
-        iuem_user = getUserByUID(u)
-        try:
-            if not api.user.get(username=iuem_user.uid):
-                props = dict(fullname=iuem_user.cn)
-                api.user.create(
-                    username=iuem_user.uid,
-                    email=iuem_user.mail,
-                    properties=props)
-                # transaction.commit()
-                pwds[iuem_user.uid] = iuem_user.pw
-                # transaction.commit()
-            api.group.add_user(groupname=group_cn, username=iuem_user.uid)
-        except Exception:
-            logger.info('error: %s' % u)
+        plone_user = createUser(u)
+        api.group.add_user(groupname=group_cn, username=plone_user.id)
     try:
         transaction.commit()
         return True
@@ -209,7 +262,7 @@ def createGroup(iuem_group):
     return group
 
 
-def delete_group_and_users(group_cn):
+def deleteGroupAndUsers(group_cn):
     """
     Supprime les utilisateurs d'un groupe donné. Si un utilisateur ne fait
     pas partie d'un autre groupe, il est supprimé aussi. Supprime aussi le
@@ -218,7 +271,7 @@ def delete_group_and_users(group_cn):
     fait partie de l'un de ces groupes locaux (autre
     que ``AuthenticatedUsers``), on ne supprime pas l'utilisateur
 
-    :param iuem_group: le groupe d'où sont tirés les noms des users
+    :param iuem_group: le groupe d'où sont tirés les ``uid``
     :type iuem_group: objet ``iuemGroup``
     :returns: ``True`` si pas de problème, ``False`` sinon.
     """
@@ -237,7 +290,7 @@ def delete_group_and_users(group_cn):
         if len(plone_groups) == 2:
             api.user.delete(username=uid)
         else:
-            logger.info('GARDER %s ' % uid)
+            logger.info('Keep : %s ' % uid)
     api.group.delete(groupname=group_cn)
     try:
         transaction.commit()
@@ -255,7 +308,7 @@ class UnrestrictedUser(BaseUnrestrictedUser):
         return "AnonymousUser"
 
 
-def update_users_password():
+def updateUsersPassword():
     """
     Met à jour les mots de passe des utilisateurs d'``acl_users``
     de plone à partir des mots de passe de l'annuaire ``LDAP``.

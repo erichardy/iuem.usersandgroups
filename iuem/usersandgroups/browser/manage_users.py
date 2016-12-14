@@ -14,11 +14,11 @@ class manageUsers(BrowserView):
 
     def __call__(self):
         # iuem_groups = getIuemGroups()
-        # utils.createGroupAndUsers('iuem')
-        # utils.deleteGroupAndUsers('iuem')
+        utils.createGroupAndUsers('iuem')
+        utils.deleteGroupAndUsers('iuem')
         # utils.createGroupAndUsers('comiuem')
         # utils.createGroupAndUsers('feiri')
-        utils.createGroupAndUsers('ecofluxweb')
+        # utils.createGroupAndUsers('ecofluxweb')
         # utils.deleteGroupAndUsers('ecofluxweb')
         # utils.deleteGroupAndUsers('feiri')
         # utils.updateUsersPassword()

@@ -6,7 +6,6 @@ import datetime
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import (
     newSecurityManager, setSecurityManager)
-from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
 
 from zope.publisher.browser import BrowserView
 
@@ -46,6 +45,7 @@ class groupsUpdate(BrowserView):
             newSecurityManager(None, tmp_user)
             plone_groups = api.group.get_groups()
             for plone_group in plone_groups:
+                logger.info('goup en cours: %s' % plone_group)
                 self.update_group(plone_group)
             transaction.commit()
         finally:
@@ -68,7 +68,7 @@ class groupsUpdate(BrowserView):
         """
         iuem_group = getGroupByCN(plone_group)
         if not iuem_group:
-            logger.info('Local group not updated : %s' % iuem_group)
+            logger.info('Local group not updated : %s' % plone_group)
             return None
         # import pdb;pdb.set_trace()
         plone_members = api.user.get_users(groupname=iuem_group.cn)

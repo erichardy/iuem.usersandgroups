@@ -83,13 +83,17 @@ def getUserByUID(uid):
         results = comm.search(search_filter, SUBTREE)
         # return results[0][1]['uid'][0]
         result = results[0][1]
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         user = iuemUser()
         user.dn = results[0][0]
         user.cn = result.get('cn')[0]
         user.uid = result.get('uid')[0]
         user.mail = result.get('mail')[0]
-        user.pw = result.get('userPassword')[0]
+        userPassword = result.get('userPassword')
+        if userPassword:
+            user.pw = result.get('userPassword')[0]
+        else:
+            userPassword = 'xyz'
         user.uidNumber = result.get('uidNumber')[0]
         user.gidNumber = result.get('gidNumber')[0]
         return user
@@ -111,7 +115,6 @@ def createUser(uid):
     if not iuem_user:
         logger.info('user %s cannot be updated' % uid)
         return None
-    logger.info(uid)
     plone_user = api.user.get(username=iuem_user.uid)
     if plone_user:
         return plone_user
@@ -159,6 +162,7 @@ def removeUserFromGroup(uid, gid):
             return None
     plone_group = api.group.get(groupname=gid)
     return plone_group
+
 
 def getIuemGroups():
     """

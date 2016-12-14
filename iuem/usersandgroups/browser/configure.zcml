@@ -10,6 +10,13 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      for="*"
+      name="pw-update"
+      class=".pw_update.pwUpdate"
+      permission="zope2.View"
+      />
+
     <!-- -*- extra stuff goes here -*- -->
   <!-- EXAMPLE:
   <browser:viewlet

@@ -3,6 +3,10 @@
 import logging
 import datetime
 import transaction
+from AccessControl import getSecurityManager
+from AccessControl.SecurityManagement import (
+    newSecurityManager, setSecurityManager)
+from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
 
 from node.ext.ldap import LDAPProps
 from node.ext.ldap import LDAPConnector
@@ -14,7 +18,7 @@ from plone import api
 from iuem.usersandgroups.iuemuser import iuemUser
 from iuem.usersandgroups.iuemgroup import iuemGroup
 
-logger = logging.getLogger('iuem.usersandgroups.tebl:utils')
+logger = logging.getLogger('iuem.usersandgroups:utils')
 
 # Misc utilities
 
@@ -242,124 +246,43 @@ def delete_group_and_users(group_cn):
         return False
 
 
+class UnrestrictedUser(BaseUnrestrictedUser):
+    """Unrestricted user that still has an id.
+    """
+    def getId(self):
+        """Return the ID of the user.
+        """
+        return "AnonymousUser"
+
+
 def update_users_password():
+    """
+    Met à jour les mots de passe des utilisateurs d'``acl_users``
+    de plone à partir des mots de passe de l'annuaire ``LDAP``.
+    """
     now = datetime.datetime.now()
     logger.info('Starting update passwords at ' + str(now))
-    users = api.user.get_users()
     portal = api.portal.get()
-    pwds = portal.acl_users.source_users._user_passwords
-    for user in users:
-        uid = user.id
-        iuem_user = getUserByUID(uid)
-        pwds[uid] = iuem_user.pw
+    sm = getSecurityManager()
+    try:
+        # go Admin, even in anymomous mode !
+        tmp_user = UnrestrictedUser(
+            sm.getUser().getId(), '', ['Manager'], '')
+        tmp_user = tmp_user.__of__(portal.acl_users)
+        newSecurityManager(None, tmp_user)
+        users = api.user.get_users()
+        portal = api.portal.get()
+        pwds = portal.acl_users.source_users._user_passwords
+        for user in users:
+            uid = user.id
+            try:
+                iuem_user = getUserByUID(uid)
+                pwds[uid] = iuem_user.pw
+            except Exception:
+                logger.info('Cannot update password for %s' % uid)
+        transaction.commit()
+    finally:
+            # Restore the old security manager
+            setSecurityManager(sm)
     now = datetime.datetime.now()
     logger.info('Update passwords finished at ' + str(now))
-
-"""
-conn = LDAPConnector(props=props)
-
-conn.bind()
-
-comm = LDAPCommunicator(conn)
-comm.baseDN = 'dc=univ-brest,dc=fr'
-comm.bind()
-filter = '(objectClass=uboPersonne)'
-filter = 'ou=people'
-filter = 'uid=hardy'
-filter = 'uid=ext_hardy'
-res = comm.search(filter , SUBTREE)
-"""
-
-"""
-[~]> ldapsearch  -H ldap://annuaire-iuem.univ-brest.fr \
--b ou=people,dc=univ-brest,dc=fr -LLL -D "cn=admin,dc=univ-brest,dc=fr" \
--W uid=hardy
-Enter LDAP Password:
-dn: uid=hardy,ou=people,dc=univ-brest,dc=fr
-objectClass: top
-objectClass: person
-objectClass: organizationalPerson
-objectClass: inetOrgPerson
-objectClass: posixAccount
-objectClass: sambaSamAccount
-objectClass: eduPerson
-objectClass: supannPerson
-objectClass: radiusprofile
-objectClass: inetLocalMailRecipient
-objectClass: uboPersonne
-objectClass: shadowAccount
-sn: Hardy
-givenName: Eric
-displayName: Eric Hardy
-cn: Hardy Eric
-uid: hardy
-uboDateNaissance: 06/03/1955
-uboMailRejet: REJECT
-uboVerrou: OFF
-preferredLanguage: fr
-loginShell: /bin/tcsh
-gecos: Eric Hardy
-sambaAcctFlags: [U          ]
-sambaPwdCanChange: 1126081548
-sambaPwdMustChange: 2147483647
-sambaPwdLastSet: 1126081548
-sambaPrimaryGroupSID: S-1-5-21-3412794192-174867775-3059846230-51341
-supannAliasLogin: hardy
-supannCivilite: M.
-supannListeRouge: FALSE
-telephoneNumber: 0298498716
-uboMdpInit: {crypt}gQqKAyM6vIgyM
-radiusTunnelType: VLAN
-radiusTunnelMediumType: IEEE-802
-radiusTunnelPrivateGroupId: 132
-mailHost: mailhost.univ-brest.fr
-uboDateCreation: 20050830
-mailLocalAddress: feiri@univ-brest.fr
-mailLocalAddress: hardy@univ-brest.fr
-mailLocalAddress: eric.hardy@univ-brest.fr
-initials: Eric.Hardy@univ-brest.fr
-mailRoutingAddress: hardy@univ-brest.fr
-homeDirectory: /home/h/hardy
-uidNumber: 200459
-departmentNumber: ICH1
-supannAffectation: UMS 3113
-supannEntiteAffectation: UMS 3113
-uboAffectPrincAnt: IRE2
-gidNumber: 51341
-uboCmp: I
-uboLibelleCmp: IUEM
-supannRole: heberge
-supannRoleGenerique: heberge
-uboListGroup: I
-uboListGroup: ICH
-uboListGroup: ICH1
-postalAddress:: ICAgICRDT0FUTEFFUk9VTiQyOTI5MCRNSUxJWkFDJEZSQU5DRQ==
-mail: Eric.Hardy@univ-brest.fr
-mailForwardingAddress: hardy@univ-brest.fr
-shadowMax: 99999
-supannAutreMail: feiri@univ-brest.fr
-supannAutreMail: hardy@univ-brest.fr
-supannAutreMail: eric.hardy@univ-brest.fr
-sambaSID: S-1-5-21-3412794192-174867775-3059846230-401919
-eduPersonPrincipalName: hardy@univ-brest.fr
-uboDateFinCompte: 20991231
-supannMailPerso: hardy@univ-brest.fr
-l: MILIZAC
-uboTypeIndividu: H
-supannEmpId: 459
-supannRefId: {HARPEGE}459
-eduPersonPrimaryAffiliation: employee
-eduPersonAffiliation: employee
-eduPersonOrgDN: dc=univ-brest,dc=fr
-supannOrganisme: {CNRS}UMS 3113 - OSU
-supannEtablissement: {CNRS}UMS 3113 - OSU
-uboDateModif: 20130927
-sambaPasswordHistory: {SSHA}AdYxS7WYG58Tu67VPxtqh2WsLjStADAsIBno/w==
-sambaPasswordHistory: {SSHA}z4sU3af7f2JFVpjYm6YITJfxScHW1+YGzkKnnQ==
-sambaPasswordHistory: {SSHA}ujuugevZRnEoUN4JKie7vJ1FY3Nl/dSNZMlPPg==
-shadowLastChange: 20161212
-userPassword:: e1NTSEF9MEhQTlk3VzNET3RzVG82WjJocDJHRGFQMVRjbTBqVk94TGtrVEE9PQ=
- =
-sambaLMPassword: 00000000000000
-sambaNTPassword: 7226FB1E87861BD6609574B31F531242
-"""

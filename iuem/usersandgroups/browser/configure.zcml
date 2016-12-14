@@ -10,34 +10,7 @@
       permission="cmf.ManagePortal"
       />
 
-    <!-- -*- extra stuff goes here -*- 
-  <browser:page
-      for="iuem.usersandgroups.users.IUsers"
-      name="import-users-file"
-      class=".importusers.importUsers"
-      permission="zope2.View"
-      />
-  <browser:page
-      for="iuem.usersandgroups.groups.IGroups"
-      name="import-groups-file"
-      class=".importgroups.importGroups"
-      permission="zope2.View"
-      />
-  <browser:page
-      for="iuem.usersandgroups.groups.IGroups"
-      name="sync-groups"
-      class=".syncgroups.syncGroups"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="iuem.usersandgroups.ldapdirectory.IldapDirectory"
-      name="misc-ldap-info"
-      class=".miscldapinfo.miscLdapInfo"
-      template="miscldapinfo.pt"
-      permission="zope2.View"
-      />
--->
+    <!-- -*- extra stuff goes here -*- -->
   <!-- EXAMPLE:
   <browser:viewlet
       name="iuem.someviewlet"

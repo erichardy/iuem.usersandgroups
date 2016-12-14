@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import datetime
 import transaction
 
 from node.ext.ldap import LDAPProps
@@ -242,6 +243,8 @@ def delete_group_and_users(group_cn):
 
 
 def update_users_password():
+    now = datetime.datetime.now()
+    logger.info('Starting update passwords at ' + str(now))
     users = api.user.get_users()
     portal = api.portal.get()
     pwds = portal.acl_users.source_users._user_passwords
@@ -249,7 +252,8 @@ def update_users_password():
         uid = user.id
         iuem_user = getUserByUID(uid)
         pwds[uid] = iuem_user.pw
-
+    now = datetime.datetime.now()
+    logger.info('Update passwords finished at ' + str(now))
 
 """
 conn = LDAPConnector(props=props)

@@ -164,6 +164,26 @@ def removeUserFromGroup(uid, gid):
     return plone_group
 
 
+def removeLDAPOrphanUsers():
+    """
+    Vérifie que les utilisateurs qui ont un ``uid`` LDAP
+    soient bien dans un groupe autre que AuthenticatedUsers.
+    Si ce n'est pas le cas, on supprime les comptes concernés
+
+    Cela permet, par exemple, de "nettoyer" les comptes si
+    on a supprimé, sous le control panel de gestion des utilisateurs
+    et groupe, un groupe qui a été créé à partir de l'annuaire LDAP
+    """
+    users = api.user.get_users()
+    for user in users:
+        uid = user.id
+        if getUserByUID(uid):
+            plone_groups = api.group.get_groups(username=uid)
+            if len(plone_groups) <= 1:
+                api.user.delete(username=uid)
+                logger.info('delete %s ' % uid)
+
+
 def getIuemGroups():
     """
     :returns: liste d'objets de type iuemGroup

@@ -5,6 +5,7 @@ import datetime
 from zope.publisher.browser import BrowserView
 
 from iuem.usersandgroups.utils import updateUsersPassword
+from iuem.usersandgroups.utils import removeLDAPOrphanUsers
 from iuem.usersandgroups.utils import getSettingValue
 
 logger = logging.getLogger('iuem.usersandgroups:passwords_update')
@@ -25,6 +26,7 @@ class pwUpdate(BrowserView):
             msg = "Access key doesn't match required key !!!!"
             logger.info(msg)
             return msg
+        removeLDAPOrphanUsers()
         updateUsersPassword()
         now = datetime.datetime.now()
         return 'passwords updated at ' + str(now)

@@ -9,6 +9,12 @@
     i18n_domain="iuem.usersandgroups">
 
   <includeDependencies package="." />
+  
+  <permission
+    id="iuem_users_groups.manage"
+    title="iuem.usersandgroups: Manage IUEM Users and Groups"
+  />
+  
   <include package=".browser" />
 
   <i18n:registerTranslations directory="locales" />

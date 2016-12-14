@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<rolemap>
+ <roles>
+    <role name="IUEM Users Manager"/>
+  </roles>
+
+  <permissions>
+    <permission name="iuem.usersandgroups: Manage IUEM Users and Groups" acquire="True">
+      <role name="Manager"/>
+      <role name="Site Administrator"/>
+	  <role name="IUEM Users Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

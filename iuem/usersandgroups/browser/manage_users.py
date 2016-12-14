@@ -12,14 +12,17 @@ logger = logging.getLogger('iuem.usersandgroups')
 
 class manageUsers(BrowserView):
 
-    def __call__(self):
+    def _nothing(self):
         # iuem_groups = getIuemGroups()
-        utils.createGroupAndUsers('iuem')
-        utils.deleteGroupAndUsers('iuem')
+        # utils.createGroupAndUsers('iuem')
+        # utils.deleteGroupAndUsers('iuem')
         # utils.createGroupAndUsers('comiuem')
         # utils.createGroupAndUsers('feiri')
         # utils.createGroupAndUsers('ecofluxweb')
         # utils.deleteGroupAndUsers('ecofluxweb')
         # utils.deleteGroupAndUsers('feiri')
         # utils.updateUsersPassword()
-        # import pdb;pdb.set_trace()
+        pass
+
+    def getAccessKey(self):
+        return utils.getSettingValue('updates_key')

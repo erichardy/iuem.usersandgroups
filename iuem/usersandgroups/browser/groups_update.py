@@ -45,15 +45,15 @@ class groupsUpdate(BrowserView):
             newSecurityManager(None, tmp_user)
             plone_groups = api.group.get_groups()
             for plone_group in plone_groups:
-                logger.info('goup en cours: %s' % plone_group)
                 self.update_group(plone_group)
             transaction.commit()
         finally:
                 # Restore the old security manager
                 setSecurityManager(sm)
         now = datetime.datetime.now()
-        self.request.response.redirect(portal.absolute_url())
-        return 'groups updated at ' + str(now)
+        url = self.request.get('HTTP_REFERER')
+        # self.request.response.redirect(portal.absolute_url())
+        return self.request.response.redirect(url)
 
     def update_group(self, plone_group):
         """

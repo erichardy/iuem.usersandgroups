@@ -7,7 +7,8 @@
       for="*"
       name="manage-users"
       class=".manage_users.manageUsers"
-      permission="cmf.ManagePortal"
+      template="manage_users.pt"
+      permission="iuem_users_groups.manage"
       />
 
   <browser:page

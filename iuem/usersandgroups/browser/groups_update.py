@@ -2,7 +2,6 @@
 
 import logging
 import transaction
-import datetime
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import (
     newSecurityManager, setSecurityManager)

@@ -40,29 +40,33 @@
           tal:repeat="g groups">
       <tr tal:define="members python:view.getMembers(g[0].members);
                       name python:g[0].cn;
-                      desc python:g[0].description">
-        
-        <td tal:condition="python:not g[1]">
-                <button tal:attributes="id python:g[0].cn + '-install'" tal:content="python:g[0].cn">
+                      desc python:g[0].description"
+          tal:attributes="id python:g[0].cn">
+        <span tal:condition="python:not g[1]">
+	        <td tal:attributes="class string:install">
+                <button tal:content="python:g[0].cn">
                   groupe
                 </button>
-        </td>
-        <td tal:condition="python:g[1]">
-                <span tal:attributes="id python:g[0].cn" tal:content="python:g[0].cn">
+	        </td>
+	        <td tal:attributes="class string:notinstalled">
+                <span tal:content="python:g[0].cn">
+                  groupe
+                </span>
+            </td>
+        </span>
+        <span tal:condition="python:g[1]">
+        <td tal:attributes="class string:installed">
+                <span tal:content="python:g[0].cn">
                   groupe
                 </span>
         </td>
-        <td tal:condition="python:g[1]">
-                <button tal:attributes="id python:g[0].cn + '-uninstall'" tal:content="python:g[0].cn">
-                  groupe
-                </button>
-        </td>
-        <td tal:condition="python:not g[1]">
-                <span tal:attributes="id python:g[0].cn" tal:content="python:g[0].cn">
-                  groupe
-                </span>
-        </td>
-        <td><a href="#"
+	        <td tal:attributes="class string:uninstall">
+	                <button  tal:content="python:g[0].cn">
+	                  groupe
+	                </button>
+	        </td>
+        </span>
+        <td class="description"><a href="#"
                tal:content="python:g[0].description"
                tal:attributes="href string:@@show-members?name=${name}&members=${members};
                "
@@ -79,6 +83,33 @@
   un peu de doc sur pat-plone-modal :
 /Users/hardy/.buildout/eggs/Products.CMFPlone-5.0.6-py2.7.egg/Products/CMFPlone/static/plone-compiled.js:16279
 </span>
+
+<script>
+
+$("td button").click(function(){
+	tr = $(this).parent().parent();
+	group = $(this).parent().parent().attr('id');
+	operation = $(this).parent().attr('class');
+	desc = $("#" + group + " td.description").html();
+	console.log(desc);
+	if (operation === "install") {
+		console.log('installation de ' + group);
+		content = '<td class="installed"><span>' + group + '</span>';
+		content += '<td class="uninstall"><button>' + group + '</button></td>';
+		content += '<td>' + desc + '</td>';
+		$(tr).html(content);
+	}
+	if (operation === "uninstall") {
+		console.log('de - installation de ' + group);
+		content = '<td class="uninstall"><button>' + group + '</button></td>';
+		content += '<td class="installed"><span>' + group + '</span></td>';
+		content += '<td>' + desc + '</td>';
+		$(tr).html(content);
+	}
+	
+})
+
+</script>
 </metal:content-core>
 </metal:main>
 </body>

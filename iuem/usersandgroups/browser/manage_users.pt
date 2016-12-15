@@ -9,19 +9,6 @@
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
-  <style type="text/css" title="currentStyle">
-    /* @import "++resource++jquery.datatables/extras/TableTools/media/css/dataTables.tableTools.css"; */
-    thead th {color: blue;}
-    thead tr th {min-width: 90px;}
-    .th_title {min-width: 400px}
-  </style>
-<metal:javascript fill-slot="javascript_head_slot">
-<script>
-	require = undefined;
-	define = undefined;
-</script>
-</metal:javascript>
-
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
@@ -44,21 +31,17 @@
        tal:define="groups python:view.getGroups()">
     <table>
     <theader>
-      <th>Description</th>
       <th>Groupes &agrave; installer</th>
       <th>Groupes &agrave; d&eacute;sinstaller</th>
+      <th>Description</th>
     </theader>
     <tbody>
     <span tal:omit-tag=""
           tal:repeat="g groups">
       <tr tal:define="members python:view.getMembers(g[0].members);
-                      name python:g[0].cn">
-        <td><a href="#"
-               tal:content="python:g[0].description"
-               tal:attributes="href string:@@show-members?name=${name}&members=${members}"
-               data-pat-plone-modal='{"prependContent": ".portalMessage", "width": "60em"}'
-               class="pat-plone-modal">description</a>
-        </td>
+                      name python:g[0].cn;
+                      desc python:g[0].description">
+        
         <td tal:condition="python:not g[1]">
                 <button tal:attributes="id python:g[0].cn + '-install'" tal:content="python:g[0].cn">
                   groupe
@@ -79,13 +62,23 @@
                   groupe
                 </span>
         </td>
+        <td><a href="#"
+               tal:content="python:g[0].description"
+               tal:attributes="href string:@@show-members?name=${name}&members=${members};
+               "
+               data-pat-plone-modal="width: 65em; title: Membres du groupe : ${name} (${desc})"
+               class="pat-plone-modal">description</a>
+        </td>
 
       </tr>
     </span>
     </tbody>
     </table>
   </div>
-
+  <span tal:replace="nothing">
+  un peu de doc sur pat-plone-modal :
+/Users/hardy/.buildout/eggs/Products.CMFPlone-5.0.6-py2.7.egg/Products/CMFPlone/static/plone-compiled.js:16279
+</span>
 </metal:content-core>
 </metal:main>
 </body>

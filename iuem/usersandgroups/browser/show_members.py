@@ -26,9 +26,25 @@ class showMembers(BrowserView):
         else:
             return None
 
-    def getMembers(self):
-        members = self.request.get('members')
+    def getMembers(self, n):
+        """
+        :param n: le nombre d'éléments par ligne
+        :type n: int
+        :returns: une liste de listes, les listes "secondaires" contiennent
+            n éléments
+        """
+        members = self.request.get('members').split(',')
+        lmembers = len(members)
         if members:
-            return members.split(',')
+            members.sort()
+            comp = []
+            for nb in range(0, lmembers, n):
+                l1 = []
+                for lnb in range(nb, nb + n):
+                    if lnb < lmembers:
+                        l1.append(members[lnb])
+                comp.append(l1)
+                nb = lnb + 1
+            return comp
         else:
             return []

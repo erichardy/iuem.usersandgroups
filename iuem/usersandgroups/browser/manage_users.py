@@ -32,8 +32,8 @@ class manageUsers(BrowserView):
     def getGroups(self):
         """
         :returns: une liste de tuples. Chaque tuple est composé d'un
-            objet ``iuemGroup`` et d'un booléen qui indique si le groupe ``LDAP``
-            est installé comme plone groupe.
+            objet ``iuemGroup`` et d'un booléen qui indique si le
+            groupe ``LDAP`` est installé comme plone groupe.
         """
         xiuem_groups = utils.getIuemGroups()
         iuem_groups = sorted(xiuem_groups, key=lambda g: g.cn.lower())

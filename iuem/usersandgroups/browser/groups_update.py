@@ -50,7 +50,6 @@ class groupsUpdate(BrowserView):
         finally:
                 # Restore the old security manager
                 setSecurityManager(sm)
-        now = datetime.datetime.now()
         url = self.request.get('HTTP_REFERER')
         # self.request.response.redirect(portal.absolute_url())
         return self.request.response.redirect(url)

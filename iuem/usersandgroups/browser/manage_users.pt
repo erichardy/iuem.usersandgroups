@@ -4,7 +4,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="ubl.tebl">
+      i18n:domain="iuem.usersandgroups">
 <body >
 
 <metal:main fill-slot="main">
@@ -25,21 +25,66 @@
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
-	    <a href="#" class="btn btn-default" role="button"
+	    <a href="#" class="btn btn-info" role="button"
 			   tal:attributes="href string:@@pw-update?key=${key};
 			                   title string:passwords sync beetween LDAP and Plone Site"
 			   i18n:translate=""
-			>update password</a>
+			><button id="pw-update">Synchronisation<br />des mots de passe</button></a>
 	  </div>
-	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
-	   <a href="#" class="btn btn-default" role="button"
+	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
+	   <a href="#" class="btn btn-info" role="button"
 			   tal:attributes="href string:@@groups-update?key=${key};
 			                   title string:groups sync beetween LDAP and Plone Site"
 			   i18n:translate=""
-			>update groups</a>
+			><button id="group-update">Synchronisation<br />des groupes</button></a>
 	  </div>
-	
 	</div>
+  <hr />
+  <div class="table-responsive" id="manage-groups"
+       tal:define="groups python:view.getGroups()">
+    <table>
+    <theader>
+      <th>Description</th>
+      <th>Groupes &agrave; installer</th>
+      <th>Groupes &agrave; d&eacute;sinstaller</th>
+    </theader>
+    <tbody>
+    <span tal:omit-tag=""
+          tal:repeat="g groups">
+      <tr tal:define="members python:view.getMembers(g[0].members);
+                      name python:g[0].cn">
+        <td><a href="#"
+               tal:content="python:g[0].description"
+               tal:attributes="href string:@@show-members?name=${name}&members=${members}"
+               data-pat-plone-modal='{"prependContent": ".portalMessage", "width": "60em"}'
+               class="pat-plone-modal">description</a>
+        </td>
+        <td tal:condition="python:not g[1]">
+                <button tal:attributes="id python:g[0].cn + '-install'" tal:content="python:g[0].cn">
+                  groupe
+                </button>
+        </td>
+        <td tal:condition="python:g[1]">
+                <span tal:attributes="id python:g[0].cn" tal:content="python:g[0].cn">
+                  groupe
+                </span>
+        </td>
+        <td tal:condition="python:g[1]">
+                <button tal:attributes="id python:g[0].cn + '-uninstall'" tal:content="python:g[0].cn">
+                  groupe
+                </button>
+        </td>
+        <td tal:condition="python:not g[1]">
+                <span tal:attributes="id python:g[0].cn" tal:content="python:g[0].cn">
+                  groupe
+                </span>
+        </td>
+
+      </tr>
+    </span>
+    </tbody>
+    </table>
+  </div>
 
 </metal:content-core>
 </metal:main>

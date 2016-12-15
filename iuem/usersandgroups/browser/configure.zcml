@@ -25,6 +25,14 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="show-members"
+      class=".show_members.showMembers"
+      template="show_members.pt"
+      permission="iuem_users_groups.manage"
+      />
+
     <!-- -*- extra stuff goes here -*- -->
   <!-- EXAMPLE:
   <browser:viewlet

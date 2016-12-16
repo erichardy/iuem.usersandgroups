@@ -52,9 +52,10 @@ button.display {
           tal:repeat="g groups">
       <tr tal:define="members python:view.getMembers(g[0].members);
                       name python:g[0].cn;
-                      desc python:g[0].description"
+                      desc python:g[0].description;
+                      installed python:g[1]"
           tal:attributes="id python:g[0].cn">
-        <span tal:omit-tag="" tal:condition="python:not g[1]">
+        <span tal:omit-tag="" tal:condition="not: installed">
 	        <td>
                 <button class="install mgt" tal:content="python:g[0].cn">
                   groupe
@@ -66,7 +67,7 @@ button.display {
 	            </button>
 	        </td>
         </span>
-        <span tal:omit-tag="" tal:condition="python:g[1]">
+        <span tal:omit-tag="" tal:condition="installed">
             <td>
                 <button class="install mgt" disabled="disabled" tal:content="python:g[0].cn">
                   groupe
@@ -113,11 +114,23 @@ $("td button.mgt").click(function(){
 	uninstall = $(this).hasClass('uninstall');
 	if (install) {
 		console.log('installation de ' + group);
+		$.post("@@manage-group",
+			{
+				'group': group,
+				'operation': 'install'
+			}		
+		);
 		$('tr#' + group + ' button.uninstall').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
 	}
 	if (uninstall) {
 		console.log('de - installation de ' + group);
+		$.post("@@manage-group",
+				{
+					'group': group,
+					'operation': 'uninstall'
+				}		
+			);
 		$('tr#' + group + ' button.install').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
 	}

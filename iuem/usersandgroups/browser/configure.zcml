@@ -10,6 +10,12 @@
       template="manage_users.pt"
       permission="iuem_users_groups.manage"
       />
+  <browser:page
+      for="*"
+      name="manage-group"
+      class=".manage_group.manageGroup"
+      permission="iuem_users_groups.manage"
+      />
 
   <browser:page
       for="*"

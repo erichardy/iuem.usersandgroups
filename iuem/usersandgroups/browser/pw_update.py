@@ -13,6 +13,10 @@ logger = logging.getLogger('iuem.usersandgroups:passwords_update')
 
 class pwUpdate(BrowserView):
 
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
     def __call__(self):
         """
         wget http://myplone:8080/Plone/@@pw-update?key=abcdef -O -

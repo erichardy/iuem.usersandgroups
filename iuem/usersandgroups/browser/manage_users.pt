@@ -20,25 +20,6 @@ button.display {
 	display: block;
 }
 </style>
-<div id="modal1" style="display: none">
-     <h1>Basic modal!</h1>
-     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
-<script>
-
-function install_group(group, operation){
-	console.log(operation + ' of' + group);
-	$.post("@@manage-group",
-		{
-			'group': group,
-			'operation': operation
-		},
-		function(data, status) {
-			// alert("Retour: " + data + "\nStatus: " + status);
-		}
-	);
-}
-</script>
-</div>
 
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
@@ -58,6 +39,30 @@ function install_group(group, operation){
 	  </div>
 	</div>
   <hr />
+
+	<div class="row"
+	     tal:define="key python:view.getAccessKey()">
+	  <span style="display: none" id="key">${key}</span>
+	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
+	    <a href="#" id="update-pw" class="btn btn-info plone-btn plone-btn-primary" role="button"
+			   tal:attributes="title string:passwords sync beetween LDAP and Plone Site"
+			   i18n:translate=""
+			>Synchronisation<br />des mots de passe</a>
+			<span style="display: none" id="key">${key}</span>
+			<div id="finished" style="display: none">
+			  <br >
+			  <span id="msg-pw-update">msg</span>
+			</div>
+	  </div>
+	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
+	   <a href="#" class="btn btn-info" role="button"
+			   tal:attributes="href string:@@groups-update?key=${key};
+			                   title string:groups sync beetween LDAP and Plone Site"
+			   i18n:translate=""
+			><button id="group-update">Synchronisation<br />des groupes</button></a>
+	  </div>
+	</div>
+<hr />
   <div class="table-responsive" id="manage-groups"
        tal:define="groups python:view.getGroups()">
     <table>
@@ -134,6 +139,21 @@ https://plone.github.io/mockup/dev/#pattern/modal
 </span>
 
 <script>
+key = $("#key").text();
+$('#update-pw').click(function(){
+	$.post("@@pw-update?key=" + key,
+			{},
+	        function(data, status) {
+				if (status === 'success') {
+					$("#finished").show();
+					$("#msg-pw-update").text(data)
+				}
+				else {
+					$("#errors").show();
+				}
+			}
+		);
+});
 
 $("td a.mgt").click(function(){
 	tr = $(this).parent().parent();

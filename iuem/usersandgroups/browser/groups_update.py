@@ -2,6 +2,7 @@
 
 import logging
 import transaction
+import datetime
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import (
     newSecurityManager, setSecurityManager)
@@ -49,9 +50,9 @@ class groupsUpdate(BrowserView):
         finally:
                 # Restore the old security manager
                 setSecurityManager(sm)
-        url = self.request.get('HTTP_REFERER')
+        now = datetime.datetime.now()
         # self.request.response.redirect(portal.absolute_url())
-        return self.request.response.redirect(url)
+        return 'groups updated at ' + str(now)
 
     def update_group(self, plone_group):
         """

@@ -12,33 +12,6 @@
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
-<style type="text/css" title="currentStyle">
-button.nodisplay {
-	display: none;
-	}
-button.display {
-	display: block;
-}
-</style>
-
-	<div class="row"
-	     tal:define="key python:view.getAccessKey()">
-	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
-	    <a href="#" class="btn btn-info" role="button"
-			   tal:attributes="href string:@@pw-update?key=${key};
-			                   title string:passwords sync beetween LDAP and Plone Site"
-			   i18n:translate=""
-			><button id="pw-update">Synchronisation<br />des mots de passe</button></a>
-	  </div>
-	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
-	   <a href="#" class="btn btn-info" role="button"
-			   tal:attributes="href string:@@groups-update?key=${key};
-			                   title string:groups sync beetween LDAP and Plone Site"
-			   i18n:translate=""
-			><button id="group-update">Synchronisation<br />des groupes</button></a>
-	  </div>
-	</div>
-  <hr />
 
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
@@ -49,17 +22,27 @@ button.display {
 			   i18n:translate=""
 			>Synchronisation<br />des mots de passe</a>
 			<span style="display: none" id="key">${key}</span>
-			<div id="finished" style="display: none">
+			<div id="pw-finished" style="display: none">
+			  <button id="msg-pw-update">msg</button>
+			</div>
+			<div id="pw-errors" style="display: none">
 			  <br >
-			  <span id="msg-pw-update">msg</span>
+			  <span id="msg-pw-update">Il y a eu des erreurs</span>
 			</div>
 	  </div>
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
-	   <a href="#" class="btn btn-info" role="button"
-			   tal:attributes="href string:@@groups-update?key=${key};
-			                   title string:groups sync beetween LDAP and Plone Site"
+	   <a href="#" id="sync-groups" class="btn btn-info plone-btn plone-btn-primary" role="button"
+			   tal:attributes="title string:groups sync beetween LDAP and Plone Site"
 			   i18n:translate=""
-			><button id="group-update">Synchronisation<br />des groupes</button></a>
+			>Synchronisation<br />des groupes</a>
+			<div id="groups-finished" style="display: none">
+			  <button id="msg-sync-groups">msg</button>
+			</div>
+			<div id="groups-errors" style="display: none">
+			  <br >
+			  <span id="msg-pw-update">Il y a eu des erreurs</span>
+			</div>
+			
 	  </div>
 	</div>
 <hr />
@@ -145,16 +128,39 @@ $('#update-pw').click(function(){
 			{},
 	        function(data, status) {
 				if (status === 'success') {
-					$("#finished").show();
+					$("#pw-finished").show();
+					$("#pw-finished").css('cursor', 'pointer');
 					$("#msg-pw-update").text(data)
 				}
 				else {
-					$("#errors").show();
+					$("#pw-errors").show();
 				}
 			}
 		);
 });
 
+$("#sync-groups").click(function(){
+	$.post("@@groups-update?key=" + key,
+			{},
+	        function(data, status) {
+				if (status === 'success') {
+					$("#groups-finished").show();
+					$("#groups-finished").css('cursor', 'pointer');
+					$("#msg-sync-groups").text(data)
+				}
+				else {
+					$("#groups-errors").show();
+				}
+			}
+		);
+});
+
+$("#pw-finished").click(function(){
+	$(this).hide();
+});
+$("#groups-finished").click(function(){
+	$(this).hide();
+});
 $("td a.mgt").click(function(){
 	tr = $(this).parent().parent();
 	group = $(this).parent().parent().attr('id');

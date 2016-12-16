@@ -10,7 +10,7 @@ from iuem.usersandgroups import utils
 logger = logging.getLogger('iuem.usersandgroups:manageGroup')
 
 
-class manageGroup(BrowserView):
+class addRemoveGroup(BrowserView):
 
     def __init__(self, context, request):
         self.context = context

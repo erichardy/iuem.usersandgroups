@@ -72,39 +72,50 @@ function install_group(group, operation){
       <tr tal:define="members python:view.getMembers(g[0].members);
                       name python:g[0].cn;
                       desc python:g[0].description;
-                      installed python:g[1]"
+                      installed python:g[1];
+                      group python:g[0].cn"
           tal:attributes="id python:g[0].cn">
         <span tal:omit-tag="" tal:condition="not: installed">
 	        <td>
                 <a class="install mgt plone-btn plone-btn-primary pat-plone-modal"
                    data-pat-plone-modal="width: 500"
-                   tal:attributes="href string:${portal_url}/@@manage-users-modal"
+                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=install"
                    tal:content="python:g[0].cn">
                   groupe
                 </a>
             </td>
             <td>
-	            <button class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal" disabled="disabled" tal:content="python:g[0].cn">
-	              groupe
-	            </button>
+               <a class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal"
+                  disabled="disabled"
+                  data-pat-plone-modal="width: 500"
+                  tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=uninstall"
+                  tal:content="python:g[0].cn">
+                  groupe
+                </a>
 	        </td>
         </span>
         <span tal:omit-tag="" tal:condition="installed">
             <td>
-                <button class="install mgt plone-btn plone-btn-primary pat-plone-modal" disabled="disabled" tal:content="python:g[0].cn">
+                <a class="install mgt plone-btn plone-btn-primary pat-plone-modal"
+                   disabled="disabled"
+                   data-pat-plone-modal="width: 500"
+                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=install"
+                   tal:content="python:g[0].cn">
                   groupe
-                </button>
+                </a>
             </td>
             <td>
-                <button class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal" tal:content="python:g[0].cn">
+                <a class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal"
+                   data-pat-plone-modal="width: 500"
+                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=uninstall"
+                   tal:content="python:g[0].cn">
                   groupe
-                </button>
+                </a>
 	        </td>
 	    </span>
 	    <td class="description"><a href="#"
                tal:content="python:g[0].description"
-               tal:attributes="href string:@@show-members?name=${name}&members=${members};
-               "
+               tal:attributes="href string:@@show-members?name=${name}&members=${members}"
                data-pat-plone-modal="width: 65em; title: Membres du groupe : ${name} (${desc})"
                class="pat-plone-modal">description</a>
         </td>
@@ -123,27 +134,8 @@ https://plone.github.io/mockup/dev/#pattern/modal
 </span>
 
 <script>
-function cursor_wait() {
-	document.body.style.cursor = 'wait';
-}
-function cursor_clear() {
-	document.body.style.cursor = 'default';
-}
-function install_group(group, operation){
-	console.log(operation + ' of' + group);
-	$.post("@@manage-group",
-		{
-			'group': group,
-			'operation': operation
-		},
-		function(data, status) {
-			// alert("Retour: " + data + "\nStatus: " + status);
-		}
-	);
-}
 
-$("td .mgtttt").click(function(){
-	var modal = document.getElementById('modal1');
+$("td a.mgt").click(function(){
 	tr = $(this).parent().parent();
 	group = $(this).parent().parent().attr('id');
 	td = $(this).parent();
@@ -151,16 +143,15 @@ $("td .mgtttt").click(function(){
 	install = $(this).hasClass('install');
 	uninstall = $(this).hasClass('uninstall');
 	if (install) {
-		install_group(group, 'install');
-		$('tr#' + group + ' button.uninstall').removeAttr('disabled');
+		$('tr#' + group + ' a.uninstall').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
+		console.log('installe');
 	}
 	if (uninstall) {
-		install_group(group, 'uninstall');
-		$('tr#' + group + ' button.install').removeAttr('disabled');
+		$('tr#' + group + ' a.install').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
+		console.log('de installe');
 	}
-	$("#modal1").css('display',"none");
 });
 
 </script>

@@ -12,62 +12,52 @@
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
-<style type="text/css" title="currentStyle">
-button.nodisplay {
-	display: none;
-	}
-button.display {
-	display: block;
-}
-</style>
 
-<p tal:content="${request/group}" />
-<p tal:content="${request/operation}" />
+<div tal:define="group string:${request/form/group};
+                 operation string:${request/form/operation};
+                 " >
 
-  <hr />
+<h3>Groupe : <span id="group" tal:content="string:${group}">g</span></h3>
+<p />
+<h3>Op&eacute;ration en cours : <span id="operation" tal:content="string:${operation}">operation</span></h3>
+
+<div id="finished" style="display: none">
+  <h4>Termin&eacute;</h4>
+</div>
+<div id="errors" style="display: none">
+  <h4>Erreurs...</h4>
+  <h5>Consulter les logs...</h5>
+</div>
 
 
+</div>
 <script>
-function cursor_wait() {
-	document.body.style.cursor = 'wait';
-}
-function cursor_clear() {
-	document.body.style.cursor = 'default';
-}
+
+group = $("#group").text();
+operation = $("#operation").text();
+
+install_group(group, operation);
+
 function install_group(group, operation){
-	console.log(operation + ' of' + group);
-	$.post("@@manage-group",
+	console.log(operation + ' of ' + group);
+	$.post("@@add-remove-group",
 		{
 			'group': group,
 			'operation': operation
 		},
 		function(data, status) {
-			// alert("Retour: " + data + "\nStatus: " + status);
+			if (status === 'success') {
+				$("#finished").show();
+			}
+			else {
+				$("#errors").show();
+			}
 		}
 	);
 }
 
-$("td .mgtttt").click(function(){
-	var modal = document.getElementById('modal1');
-	tr = $(this).parent().parent();
-	group = $(this).parent().parent().attr('id');
-	td = $(this).parent();
-	klass = $(this).attr('class');
-	install = $(this).hasClass('install');
-	uninstall = $(this).hasClass('uninstall');
-	if (install) {
-		install_group(group, 'install');
-		$('tr#' + group + ' button.uninstall').removeAttr('disabled');
-		$(this).attr('disabled', 'disabled');
-	}
-	if (uninstall) {
-		install_group(group, 'uninstall');
-		$('tr#' + group + ' button.install').removeAttr('disabled');
-		$(this).attr('disabled', 'disabled');
-	}
-	$("#modal1").css('display',"none");
-});
-
+// $(".plone-modal-wrapper").hide();
+// $(".plone-modal-backdrop").hide();
 </script>
 </metal:content-core>
 </metal:main>

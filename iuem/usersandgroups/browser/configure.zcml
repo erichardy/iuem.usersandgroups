@@ -9,11 +9,19 @@
       class=".manage_users.manageUsers"
       template="manage_users.pt"
       permission="iuem_users_groups.manage"
-      />
+      />manage_users_modal
   <browser:page
       for="*"
-      name="manage-group"
-      class=".manage_group.manageGroup"
+      name="manage-users-modal"
+      class=".manage_users_modal.manageUsersModal"
+      template="manage_users_modal.pt"
+      permission="iuem_users_groups.manage"
+      />
+      
+  <browser:page
+      for="*"
+      name="add-remove-group"
+      class=".add_remove_group.addRemoveGroup"
       permission="iuem_users_groups.manage"
       />
 

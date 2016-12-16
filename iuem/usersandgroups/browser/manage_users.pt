@@ -5,10 +5,22 @@
       lang="en"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="iuem.usersandgroups">
+<head>
+
+</head>
 <body >
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
+<style type="text/css" title="currentStyle">
+button.nodisplay {
+	display: none;
+	}
+button.display {
+	display: block;
+}
+</style>
+
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
@@ -42,72 +54,75 @@
                       name python:g[0].cn;
                       desc python:g[0].description"
           tal:attributes="id python:g[0].cn">
-        <span tal:condition="python:not g[1]">
-	        <td tal:attributes="class string:install">
-                <button tal:content="python:g[0].cn">
+        <span tal:omit-tag="" tal:condition="python:not g[1]">
+	        <td>
+                <button class="install mgt" tal:content="python:g[0].cn">
+                  groupe
+                </button>
+            </td>
+            <td>
+	            <button class="uninstall mgt" disabled="disabled" tal:content="python:g[0].cn">
+	              groupe
+	            </button>
+	        </td>
+        </span>
+        <span tal:omit-tag="" tal:condition="python:g[1]">
+            <td>
+                <button class="install mgt" disabled="disabled" tal:content="python:g[0].cn">
+                  groupe
+                </button>
+            </td>
+            <td>
+                <button class="uninstall mgt" tal:content="python:g[0].cn">
                   groupe
                 </button>
 	        </td>
-	        <td tal:attributes="class string:notinstalled">
-                <span tal:content="python:g[0].cn">
-                  groupe
-                </span>
-            </td>
-        </span>
-        <span tal:condition="python:g[1]">
-        <td tal:attributes="class string:installed">
-                <span tal:content="python:g[0].cn">
-                  groupe
-                </span>
-        </td>
-	        <td tal:attributes="class string:uninstall">
-	                <button  tal:content="python:g[0].cn">
-	                  groupe
-	                </button>
-	        </td>
-        </span>
-        <td class="description"><a href="#"
+	    </span>
+	    <td class="description"><a href="#"
                tal:content="python:g[0].description"
                tal:attributes="href string:@@show-members?name=${name}&members=${members};
                "
                data-pat-plone-modal="width: 65em; title: Membres du groupe : ${name} (${desc})"
                class="pat-plone-modal">description</a>
         </td>
-
+	    
       </tr>
     </span>
     </tbody>
     </table>
   </div>
-  <span tal:replace="nothing">
+
+<span tal:replace="nothing">
   un peu de doc sur pat-plone-modal :
 /Users/hardy/.buildout/eggs/Products.CMFPlone-5.0.6-py2.7.egg/Products/CMFPlone/static/plone-compiled.js:16279
+et surtout :
+https://plone.github.io/mockup/dev/#pattern/modal
 </span>
 
 <script>
+$("button.notinstalled").attr("disabled", "disabled");
+$("button.installed").attr("disabled", "disabled");
 
-$("td button").click(function(){
+$("td button.mgt").click(function(){
 	tr = $(this).parent().parent();
 	group = $(this).parent().parent().attr('id');
-	operation = $(this).parent().attr('class');
-	desc = $("#" + group + " td.description").html();
-	console.log(desc);
-	if (operation === "install") {
+	td = $(this).parent();
+	klass = $(this).attr('class');
+	operation = '';
+	install = $(this).hasClass('install');
+	uninstall = $(this).hasClass('uninstall');
+	if (install) {
 		console.log('installation de ' + group);
-		content = '<td class="installed"><span>' + group + '</span>';
-		content += '<td class="uninstall"><button>' + group + '</button></td>';
-		content += '<td>' + desc + '</td>';
-		$(tr).html(content);
+		$('tr#' + group + ' button.uninstall').removeAttr('disabled');
+		$(this).attr('disabled', 'disabled');
 	}
-	if (operation === "uninstall") {
+	if (uninstall) {
 		console.log('de - installation de ' + group);
-		content = '<td class="uninstall"><button>' + group + '</button></td>';
-		content += '<td class="installed"><span>' + group + '</span></td>';
-		content += '<td>' + desc + '</td>';
-		$(tr).html(content);
+		$('tr#' + group + ' button.install').removeAttr('disabled');
+		$(this).attr('disabled', 'disabled');
 	}
 	
-})
+});
 
 </script>
 </metal:content-core>

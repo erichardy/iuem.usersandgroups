@@ -101,40 +101,44 @@ https://plone.github.io/mockup/dev/#pattern/modal
 </span>
 
 <script>
-$("button.notinstalled").attr("disabled", "disabled");
-$("button.installed").attr("disabled", "disabled");
+function cursor_wait() {
+	document.body.style.cursor = 'wait';
+}
+function cursor_clear() {
+	document.body.style.cursor = 'default';
+}
+function install_group(group, operation){
+	console.log(operation + ' of' + group);
+	$.post("@@manage-group",
+		{
+			'group': group,
+			'operation': operation
+		},
+		function(data, status) {
+			alert("Retour: " + data + "\nStatus: " + status);
+		}
+	);
+}
 
 $("td button.mgt").click(function(){
+	cursor_wait();
 	tr = $(this).parent().parent();
 	group = $(this).parent().parent().attr('id');
 	td = $(this).parent();
 	klass = $(this).attr('class');
-	operation = '';
 	install = $(this).hasClass('install');
 	uninstall = $(this).hasClass('uninstall');
 	if (install) {
-		console.log('installation de ' + group);
-		$.post("@@manage-group",
-			{
-				'group': group,
-				'operation': 'install'
-			}		
-		);
+		install_group(group, 'install');
 		$('tr#' + group + ' button.uninstall').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
 	}
 	if (uninstall) {
-		console.log('de - installation de ' + group);
-		$.post("@@manage-group",
-				{
-					'group': group,
-					'operation': 'uninstall'
-				}		
-			);
+		install_group(group, 'uninstall');
 		$('tr#' + group + ' button.install').removeAttr('disabled');
 		$(this).attr('disabled', 'disabled');
 	}
-	
+	cursor_clear();
 });
 
 </script>

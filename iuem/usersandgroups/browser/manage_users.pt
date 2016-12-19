@@ -60,54 +60,40 @@
       <tr tal:define="members python:view.getMembers(g[0].members);
                       name python:g[0].cn;
                       desc python:g[0].description;
-                      installed python:g[1];
-                      group python:g[0].cn"
+                      installed python:g[1]"
           tal:attributes="id python:g[0].cn">
         <span tal:omit-tag="" tal:condition="not: installed">
-	        <td>
-                <a class="install mgt plone-btn plone-btn-primary pat-plone-modal"
-                   data-pat-plone-modal="width: 500"
-                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=install"
-                   tal:content="python:g[0].cn">
+                <td>
+                <button class="install mgt" tal:content="python:g[0].cn">
                   groupe
-                </a>
+                </button>
             </td>
             <td>
-               <a class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal"
-                  disabled="disabled"
-                  data-pat-plone-modal="width: 500"
-                  tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=uninstall"
-                  tal:content="python:g[0].cn">
-                  groupe
-                </a>
-	        </td>
+                    <button class="uninstall mgt" disabled="disabled" tal:content="python:g[0].cn">
+                      groupe
+                    </button>
+                </td>
         </span>
         <span tal:omit-tag="" tal:condition="installed">
             <td>
-                <a class="install mgt plone-btn plone-btn-primary pat-plone-modal"
-                   disabled="disabled"
-                   data-pat-plone-modal="width: 500"
-                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=install"
-                   tal:content="python:g[0].cn">
+                <button class="install mgt" disabled="disabled" tal:content="python:g[0].cn">
                   groupe
-                </a>
+                </button>
             </td>
             <td>
-                <a class="uninstall mgt plone-btn plone-btn-primary pat-plone-modal"
-                   data-pat-plone-modal="width: 500"
-                   tal:attributes="href string:${portal_url}/@@manage-users-modal?group=${group}&operation=uninstall"
-                   tal:content="python:g[0].cn">
+                <button class="uninstall mgt" tal:content="python:g[0].cn">
                   groupe
-                </a>
-	        </td>
-	    </span>
-	    <td class="description"><a href="#"
+                </button>
+                </td>
+            </span>
+            <td class="description"><a href="#"
                tal:content="python:g[0].description"
-               tal:attributes="href string:@@show-members?name=${name}&members=${members}"
+               tal:attributes="href string:@@show-members?name=${name}&members=${members};
+               "
                data-pat-plone-modal="width: 65em; title: Membres du groupe : ${name} (${desc})"
                class="pat-plone-modal">description</a>
         </td>
-	    
+
       </tr>
     </span>
     </tbody>
@@ -124,6 +110,9 @@ https://plone.github.io/mockup/dev/#pattern/modal
 <script>
 key = $("#key").text();
 $('#update-pw').click(function(){
+	button = this;
+	cursor = 
+	$("*").css("cursor", 'wait');
 	$.post("@@pw-update?key=" + key,
 			{},
 	        function(data, status) {
@@ -135,11 +124,14 @@ $('#update-pw').click(function(){
 				else {
 					$("#pw-errors").show();
 				}
+				$("*").css("cursor", 'auto');
 			}
 		);
 });
 
 $("#sync-groups").click(function(){
+	button = this;
+	$("*").css("cursor", 'wait');
 	$.post("@@groups-update?key=" + key,
 			{},
 	        function(data, status) {
@@ -151,6 +143,7 @@ $("#sync-groups").click(function(){
 				else {
 					$("#groups-errors").show();
 				}
+				$("*").css("cursor", 'auto');
 			}
 		);
 });
@@ -161,7 +154,8 @@ $("#pw-finished").click(function(){
 $("#groups-finished").click(function(){
 	$(this).hide();
 });
-$("td a.mgt").click(function(){
+$("td .mgt").click(function(){
+	button = this;
 	tr = $(this).parent().parent();
 	group = $(this).parent().parent().attr('id');
 	td = $(this).parent();
@@ -169,14 +163,37 @@ $("td a.mgt").click(function(){
 	install = $(this).hasClass('install');
 	uninstall = $(this).hasClass('uninstall');
 	if (install) {
-		$('tr#' + group + ' a.uninstall').removeAttr('disabled');
-		$(this).attr('disabled', 'disabled');
-		console.log('installe');
-	}
+		$("*").css("cursor", 'wait');
+		$.post("@@add-remove-group",
+                {
+                        'group': group,
+                        'operation': 'install'
+                },
+				function(data, status){
+	        		// alert("Data: " + data + "\nStatus: " + status);
+	        		$('tr#' + group + ' .uninstall').removeAttr('disabled');
+	        		$(button).attr('disabled', 'disabled');
+	        		$("*").css("cursor", 'auto');
+	        		console.log('installe');
+    			}
+        );		
+	};
 	if (uninstall) {
-		$('tr#' + group + ' a.install').removeAttr('disabled');
-		$(this).attr('disabled', 'disabled');
-		console.log('de installe');
+		$("*").css("cursor", 'wait');
+		$.post("@@add-remove-group",
+                {
+                        'group': group,
+                        'operation': 'uninstall'
+                },
+                function(data, status){
+	        		// alert("Data: " + data + "\nStatus: " + status);
+                	$('tr#' + group + ' .install').removeAttr('disabled');
+            		$(button).attr('disabled', 'disabled');
+            		$("*").css("cursor", 'auto');
+            		console.log('de installe');
+    			}
+        );
+		
 	}
 });
 

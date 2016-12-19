@@ -5,5 +5,19 @@
 
   <records interface="iuem.usersandgroups.interfaces.IIUEMUsersAndGroupsSettings" />
 
-
+    <records prefix="plone.resources/iuem-users-groups"
+              interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+       <value key="js">++resource++iuem-users-groups/iuem-usersandgroups.js</value>
+       <value key="css">
+          <element>++resource++iuem-users-groups/iuem-usersandgroups.less</element>
+       </value>
+    </records>
+	
+	<records prefix="plone.bundles/iuem-users-groups"
+	         purge="False"
+             interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+       <value key="resources">
+         <element>iuem-users-groups</element>
+       </value>
+    </records>
 </registry>

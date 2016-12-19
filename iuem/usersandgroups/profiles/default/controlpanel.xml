@@ -23,6 +23,7 @@
     category="plone-users"
     condition_expr=""
     url_expr="string:${portal_url}/@@manage-users"
+    icon_expr="string:$portal_url/++resource++iuem-users-groups/logoIUEM-50x28.png"
     visible="True"
  	i18n:attributes="title">
     <permission>iuem.usersandgroups: Manage IUEM Users and Groups</permission>

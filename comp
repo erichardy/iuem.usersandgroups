@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bin/plone-compile-resources --bundle=iuem-users-groups && bin/instance fg

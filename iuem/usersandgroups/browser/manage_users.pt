@@ -12,7 +12,9 @@
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
-
+<a href="" tal:attributes="href string:${portal_url}/@@overview-controlpanel">
+Retour &agrave; la configuration du site
+</a>
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
 	  <span style="display: none" id="key">${key}</span>

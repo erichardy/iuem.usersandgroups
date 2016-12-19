@@ -9,6 +9,7 @@
     i18n_domain="iuem.usersandgroups">
 
   <includeDependencies package="." />
+  <cmf:registerDirectory name="iuem.usersandgroups" recursive="True"/>
   
   <permission
     id="iuem_users_groups.manage"

@@ -34,13 +34,16 @@ De ce fait, ce module réalise les opérations suivantes :
 
 * il offre une vue qui contient la liste des groupes de l'annuaire ``LDAP``
 
-* il permet de créer localement des groupes qui sont des miroirs des groupes ``LDAP``
+* par cette vue, il permet de créer localement des groupes qui sont des miroirs des groupes ``LDAP``
 
 * il gère la création des comptes des utilisateurs qui sont membres des groupes créés
 
 * lors de la suppression d'un groupe, il supprime automatiquement les comptes des
   utilisateurs lorsque ceux-ci ne sont membres d'aucun autre groupe
 
+* il permet la synchronisation des mots de passe entre l'annuaire ``LDAP`` et les comptes locaux
+
+* il permet la synchronisation de la composition des groupes entre l'annuaire ``LDAP`` et les groupes locaux
 
 Toute la documentation
 ======================
@@ -49,4 +52,7 @@ Toute la documentation
     :maxdepth: 2
 
     Le README du package <README>
-    Les types de contenu <content_types>
+    L'installation <install>
+    La configuration <config>
+    La vue de gestion des groupes <view>
+    Les cron à mettre en place <cron>

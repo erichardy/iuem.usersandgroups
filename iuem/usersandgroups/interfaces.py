@@ -44,17 +44,17 @@ class IIUEMUsersAndGroupsSettings(Interface):
         title=_(u"groups branch base"),
         description=_(u"in the form of : ou=group,dc=univ-brest,dc=fr"),
         required=True,
-        default=u"ou=group,dc=univ-brest,dc=fr",
+        default=u"ou=group,dc=local,dc=univ-brest,dc=fr",
         )
     min_gid = schema.Int(
         title=_(u"minimum GID number"),
-        description=_(u"not uset yet"),
+        description=_(u"not used yet"),
         required=True,
         default=600,
         )
     max_gid = schema.Int(
         title=_(u"maximum GID number"),
-        description=_(u"not uset yet"),
+        description=_(u"not used yet"),
         required=True,
         default=999,
         )

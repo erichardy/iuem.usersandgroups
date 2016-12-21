@@ -28,9 +28,8 @@ Les noms des champs sont explicites mais on peut tout de même préciser les él
 * les champs ``minimum GID number`` et ``maximum GID number`` ne sont pas utilisés dans cette
   première version de module.
 
-* la clé qui est demandée doit être aussi utilisée pour la mise en oeuvre des ``cron``.
+* la clé qui est demandée va être utilisée pour la mise en oeuvre des ``cron``.
   Voir le chapitre qui décrit cette fonctionnalité : :doc:`cron`
-
 
 
 

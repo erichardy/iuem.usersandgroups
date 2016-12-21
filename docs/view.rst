@@ -90,12 +90,5 @@ L'utilisation de cette interface est simple :
 * les liens dans la colone description permettent d'afficher dans une fenêtre *overlay* la
   liste des comptes du groupe concerné
 
-
-
-
-
-
-
-
-
+.. note:: par défaut, tout membre d'un groupe se voit attribué le rôle de ``membre`` du site.
 

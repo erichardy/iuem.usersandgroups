@@ -23,7 +23,9 @@
 		<p />
 	</div>
 	<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-0">
-		<a class="plone-btn plone-btn-primary" href="" tal:attributes="href string:${portal_url}/@@overview-controlpanel">
+		<a class="plone-btn plone-btn-primary" 
+		   href=""
+		   tal:attributes="href string:${portal_url}/@@overview-controlpanel">
 		Retour &agrave; la configuration du site
 		</a>
 		<p />
@@ -35,7 +37,7 @@
 	     tal:define="key python:view.getAccessKey()">
 	  <span style="display: none" id="key">${key}</span>
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
-	    <a href="#" id="update-pw" class="btn btn-info plone-btn plone-btn-primary install" role="button"
+	    <a href="#" id="update-pw" class="btn btn-info plone-btn plone-btn-primary" role="button"
 			   tal:attributes="title string:passwords sync beetween LDAP and Plone Site"
 			   i18n:translate=""
 			>Synchronisation<br />des mots de passe</a>
@@ -51,7 +53,7 @@
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
 	   <a href="#"
 	      id="sync-groups"
-	      class="btn btn-info plone-btn plone-btn-primary uninstall"
+	      class="btn btn-info plone-btn plone-btn-primary"
 	      role="button"
 		  tal:attributes="title string:groups sync beetween LDAP and Plone Site"
 		  i18n:translate=""
@@ -85,24 +87,24 @@
           tal:attributes="id python:g[0].cn">
         <span tal:omit-tag="" tal:condition="not: installed">
                 <td>
-                <button class="install mgt" tal:content="python:g[0].cn">
+                <button class="install mgt enabled" tal:content="python:g[0].cn">
                   groupe
                 </button>
             </td>
             <td>
-                    <button class="uninstall mgt" disabled="disabled" tal:content="python:g[0].cn">
+                    <button class="uninstall mgt disabled" disabled="disabled" tal:content="python:g[0].cn">
                       groupe
                     </button>
                 </td>
         </span>
         <span tal:omit-tag="" tal:condition="installed">
             <td>
-                <button class="install mgt" disabled="disabled" tal:content="python:g[0].cn">
+                <button class="install mgt disabled" disabled="disabled" tal:content="python:g[0].cn">
                   groupe
                 </button>
             </td>
             <td>
-                <button class="uninstall mgt" tal:content="python:g[0].cn">
+                <button class="uninstall mgt enabled" tal:content="python:g[0].cn">
                   groupe
                 </button>
                 </td>
@@ -193,6 +195,10 @@ $("td .mgt").click(function(){
 				function(data, status){
 	        		// alert("Data: " + data + "\nStatus: " + status);
 	        		$('tr#' + group + ' .uninstall').removeAttr('disabled');
+	        		$('tr#' + group + ' .uninstall').removeClass('disabled');
+	        		$('tr#' + group + ' .uninstall').addClass('enabled');
+	        		$(button).removeClass('enabled');
+	        		$(button).addClass('disabled');
 	        		$(button).attr('disabled', 'disabled');
 	        		$("*").css("cursor", 'auto');
 	        		console.log('installe');
@@ -209,6 +215,10 @@ $("td .mgt").click(function(){
                 function(data, status){
 	        		// alert("Data: " + data + "\nStatus: " + status);
                 	$('tr#' + group + ' .install').removeAttr('disabled');
+                	$('tr#' + group + ' .install').removeClass('disabled');
+                	$('tr#' + group + ' .install').addClass('enabled');
+                	$(button).removeClass('enabled');
+	        		$(button).addClass('disabled');
             		$(button).attr('disabled', 'disabled');
             		$("*").css("cursor", 'auto');
             		console.log('de installe');

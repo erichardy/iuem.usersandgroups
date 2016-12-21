@@ -1,10 +1,27 @@
 
-
+@LightGreen-bg: #90EE90;
+@Crimson-bg: #DC143C;
+@Crimson-fg: #f4f4f4;
 /*
 .icon-controlpanel-ldap_usersandgroups::before {
 	content: url("++resource++iuem-users-groups/logoIUEM-50x28.png");
 }
 */
 
-
+button.mgt.disabled {
+	background-color: #f2;
+}
+button.install.mgt.enabled {
+	background-color: @LightGreen-bg;
+	&:hover {
+		color: #fff;
+	}
+}
+button.uninstall.mgt.enabled {
+	background-color: @Crimson-bg;
+	color: #000;
+	&:hover {
+		color: #fff;
+	}
+}
 

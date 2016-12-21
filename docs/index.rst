@@ -51,8 +51,8 @@ Toute la documentation
 .. toctree::
     :maxdepth: 2
 
-    Le README du package <README>
     L'installation <install>
     La configuration <config>
+    Droits pour accéder à la gestion des utilisateurs et groupes <permissions>
     La vue de gestion des groupes <view>
     Les cron à mettre en place <cron>

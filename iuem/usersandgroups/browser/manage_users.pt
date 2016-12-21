@@ -12,9 +12,25 @@
 
 <metal:main fill-slot="main">
 <metal:content-core define-macro="main">
-<a href="" tal:attributes="href string:${portal_url}/@@overview-controlpanel">
-Retour &agrave; la configuration du site
-</a>
+<div class="row">
+	<div class="col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-0">
+		<a href=""
+		   class="plone-btn plone-btn-primary"
+		   tal:attributes="href string:${portal_url}/@@usergroup-userprefs"
+		   title="Panneau de contr&ocirc;le des utilisateurs et groupes de Plone">
+		Gestion des utilisateurs et groupes
+		</a>
+		<p />
+	</div>
+	<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-0">
+		<a class="plone-btn plone-btn-primary" href="" tal:attributes="href string:${portal_url}/@@overview-controlpanel">
+		Retour &agrave; la configuration du site
+		</a>
+		<p />
+	</div>
+</div>
+<hr />
+
 	<div class="row"
 	     tal:define="key python:view.getAccessKey()">
 	  <span style="display: none" id="key">${key}</span>

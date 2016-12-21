@@ -35,7 +35,7 @@
 	     tal:define="key python:view.getAccessKey()">
 	  <span style="display: none" id="key">${key}</span>
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-0">
-	    <a href="#" id="update-pw" class="btn btn-info plone-btn plone-btn-primary" role="button"
+	    <a href="#" id="update-pw" class="btn btn-info plone-btn plone-btn-primary install" role="button"
 			   tal:attributes="title string:passwords sync beetween LDAP and Plone Site"
 			   i18n:translate=""
 			>Synchronisation<br />des mots de passe</a>
@@ -49,9 +49,12 @@
 			</div>
 	  </div>
 	  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-1">
-	   <a href="#" id="sync-groups" class="btn btn-info plone-btn plone-btn-primary" role="button"
-			   tal:attributes="title string:groups sync beetween LDAP and Plone Site"
-			   i18n:translate=""
+	   <a href="#"
+	      id="sync-groups"
+	      class="btn btn-info plone-btn plone-btn-primary uninstall"
+	      role="button"
+		  tal:attributes="title string:groups sync beetween LDAP and Plone Site"
+		  i18n:translate=""
 			>Synchronisation<br />des groupes</a>
 			<div id="groups-finished" style="display: none">
 			  <button id="msg-sync-groups">msg</button>

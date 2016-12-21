@@ -22,15 +22,33 @@ et la source dans la section ``[sources]``::
 
    iuem.usersandgroups = git gitiuem:iuem.usersandgroups.git
 
+Principe général
+================
+
+A l'IUEM, nous disposons d'un annuaire LDAP qui est un méta annuaire composé de l'annuaire
+``LDAP`` de l'UBO et d'un annuaire local à l'IUEM. Ce dernier contient les groupes
+qui satisfont aux usages de nos services et une branche ``people`` qui contient des
+comptes utilisateurs extérieurs, qui ne sont donc pas dans l'annuaire de l'UBO.
+De ce fait, les comptes des utilisateurs extérieurs commencent tous par ``ext_``.
+
+**Par ce module, on gère les utilisateurs par l'intermédiaire des groupes**. De ce fait, on ne
+crée pas ou ne supprime pas de compte d'utilisateur directement, ces opérations se font au
+travers de la création ou de la suppression des groupes.
+
+.. note:: l'idée de base part du principe qu'un compte utilisateur n'existe que parce que
+   celui-ci est membre d'un groupe. S'il n'est membre d'aucun groupe, le compte est
+   automatiquement supprimé. 
+
+
 Motivation
 ==========
 
 Le module iuem.usersandgroups a été développé en raison des difficultés rencontrées
 pour *brancher* un site *Plone 5* sur ``LDAP`` de la même manière que cela était réalisé
 avec les sites *Plone 4*. C'est-à-dire que l'authentification, la gestion des comptes
-utilisateurs et des groupes soit pris en charge entièrement pas l'annuaire ``LDAP``.
+utilisateurs et des groupes soit pris en charge entièrement par l'annuaire ``LDAP``.
 
-De ce fait, ce module réalise les opérations suivantes :
+Ce module réalise les opérations suivantes :
 
 * il offre une vue qui contient la liste des groupes de l'annuaire ``LDAP``
 

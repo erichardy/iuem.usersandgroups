@@ -37,7 +37,9 @@ Il est donc possible d'attribuer ce rôle à un utilisateur particulier et/ou
 
 .. image:: usage1.png
 
+Puis l'interface :
 
+.. image:: usage2.png
 
 
 

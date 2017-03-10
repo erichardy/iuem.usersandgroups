@@ -198,7 +198,10 @@ def getIuemGroups():
         attrs = result[1]
         g.cn = attrs.get('cn')[0]
         g.gidNumber = attrs.get('gidNumber')[0]
-        g.description = attrs.get('description')[0]
+        try:
+            g.description = attrs.get('description')[0]
+        except:
+            g.description = u'No Description'
         g.members = attrs.get('memberUid')
         groups.append(g)
     return groups
